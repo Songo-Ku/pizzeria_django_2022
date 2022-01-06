@@ -1,0 +1,23 @@
+# Base serializer
+#     In particular, if a `data=` argument is passed then:
+#
+#     .is_valid() - Available.
+#     .initial_data - Available.
+#     .validated_data - Only available after calling `is_valid()`
+#     .errors - Only available after calling `is_valid()`
+#     .data - Only available after calling `is_valid()`
+#
+#     If a `data=` argument is not passed then:
+#
+#     .is_valid() - Not available.
+#     .initial_data - Not available.
+#     .validated_data - Not available.
+#     .errors - Not available.
+#     .data - Available.
+
+# fields -A dictionary of {field_name: field_instance}.
+# get_fields
+# self.fields.values()
+# get_validators
+# get_initial(self)
+# get_value(self, dictionary):

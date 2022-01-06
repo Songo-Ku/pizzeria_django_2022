@@ -6,8 +6,9 @@ admin.site.register(Topping)
 admin.site.register(Order)
 admin.site.register(OrderedProducts)
 admin.site.register(Payment)
+admin.site.register(Pizza)
 
 
-@admin.register(Pizza)
-class PizzaAdmin(admin.ModelAdmin):
-    list_display = ('name', 'local')
+# @admin.register(Pizza)
+# class PizzaAdmin(admin.ModelAdmin):
+#     list_display = ('name', 'local')
