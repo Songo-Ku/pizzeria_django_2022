@@ -1,12 +1,12 @@
 from django.contrib import admin
-from .models import Restaurant, Pizza, Topping, Order, OrderedProducts, Payment
+from .models import Restaurant, Pizza, Topping
+
 
 admin.site.register(Restaurant)
-admin.site.register(Topping)
-admin.site.register(Order)
-admin.site.register(OrderedProducts)
-admin.site.register(Payment)
 admin.site.register(Pizza)
+admin.site.register(Topping)
+
+
 
 
 # @admin.register(Pizza)
