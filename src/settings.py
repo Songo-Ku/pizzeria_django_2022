@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'pizzeria',
     'rest_framework',
+    'order_system',
 ]
 
 MIDDLEWARE = [

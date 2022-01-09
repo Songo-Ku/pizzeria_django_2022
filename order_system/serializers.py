@@ -1,42 +1,34 @@
 from pizzeria.models import Restaurant, Pizza, Topping
 from .models import Order, OrderedProducts, Payment
-
 from django.contrib.auth.models import User, Group
 from rest_framework import serializers
+from django.utils import timezone
 
 
-# class RestaurantSerializer(serializers.ModelSerializer):
-#     pizzas = serializers.PrimaryKeyRelatedField(queryset=Pizza.objects.all(), )
-#
-#     class Meta:
-#         model = Restaurant
-#         fields = ['pk', 'name', 'address', 'phone_number', 'pizzas', 'created', 'modified']
-#
-#
-# class PizzaSerializer(serializers.ModelSerializer):
-#     # local = serializers.PrimaryKeyRelatedField()
-#     # local = PizzeriaRestaurantSerializer()
-#     # local = serializers.ReadOnlyField(source='local.pk')  # to na pewno nie jest odpowiednie pole dla tego przypadku
-#
-#     # owner = serializers.ReadOnlyField(source='owner.username')
-#     restaurant_name = serializers.ReadOnlyField(source='restaurant.name')
-#     modified = serializers.ReadOnlyField()
-#
-#     class Meta:
-#         model = Pizza
-#         fields = ['pk', 'name', 'price', 'description', 'restaurant', 'restaurant_name', 'modified']
-#
-#
-# class ToppingSerializer(serializers.ModelSerializer):
-#     # local = serializers.PrimaryKeyRelatedField()
-#     # local = PizzeriaRestaurantSerializer()
-#     # local = serializers.ReadOnlyField(source='local.pk')  # to na pewno nie jest odpowiednie pole dla tego przypadku
-#
-#     # owner = serializers.ReadOnlyField(source='owner.username')
-#     restaurant_name = serializers.ReadOnlyField(source='restaurant.name')
-#     modified = serializers.ReadOnlyField()
-#
-#     class Meta:
-#         model = Topping
-#         fields = ['pk', 'name', 'price', 'description', 'restaurant', 'restaurant_name', 'modified']
+class OrderSerializer(serializers.ModelSerializer):
+    payment_status = serializers.ReadOnlyField(source='payment.status')
+    # ordered_products_names = serializers.ReadOnlyField(source='ordered_products.pizza_name', )
+    # nie wiem jak uzyskac liste z nazwami pizz z tabeli ordered_products, souirce w tym przypadku nie dziala.
+
+    class Meta:
+        model = Order
+        fields = ['pk', 'total', 'id_restaurant', 'payment_status', 'ordered_products']  # , 'ordered_products_names'
+
+
+class PaymentSerializer(serializers.ModelSerializer):
+    restaurant_name = serializers.ReadOnlyField(source='order.get_restaurant_name')
+    restaurant_id = serializers.ReadOnlyField(source='order.id_restaurant')
+
+    class Meta:
+        model = Payment
+        fields = ['pk', 'order', 'status', 'restaurant_name', 'restaurant_id']
+
+
+class OrderedProductsSerializer(serializers.ModelSerializer):
+    # meals_name = serializers.ReadOnlyField(source='pizza.name')
+    order_pk = serializers.ReadOnlyField(source='order.name')
+
+    class Meta:
+        model = OrderedProducts
+        fields = ['pk', 'pizza_name', 'amount', 'price', 'order', 'order_pk']
 
