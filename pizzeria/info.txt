@@ -21,3 +21,39 @@
 # get_validators
 # get_initial(self)
 # get_value(self, dictionary):
+
+
+to do:
+
+orderproduct zamienic nazwe na orderpossition
+orderu wystawic hyperlinka zamiast ordered_products dac hyperlinka dla konkretnego ordered_products
+http://127.0.0.1:8000/api/order-products/1
+
+
+wydzielic logike do serwisow
+
+    request.data.order.pk
+    order33 = Order.object.get(id=33)
+    update
+    i wywolaj metode order33.set_total()
+    order33.save()
+
+zapisujac post ordered_product musze dac update danego orderu i jego zapis.
+
+
+
+
+zrobic metode set_total
+i obsłużyć to w widoku przy post/create
+    def set_total(self):
+        return self.product.price * self.product.count
+
+
+diopytac czy tak powinno byc w modelu
+
+
+te kalkulacje powinny aktualizować dla put putch delete
+
+
+
+

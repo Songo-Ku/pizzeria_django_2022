@@ -25,11 +25,14 @@ class Order(models.Model):
             return 'Not added yet - Unknown'
 
     def set_total(self, total):
-        calculated_total = self.orderedproducts_set.all()
-        # -----------------------------------
-        # -----------------------------------
-        # tutaj  zwrocic odpowiednia kwote za kazdym razem i napisac
         self.total = total
+        # list_products = self.orderedproducts_set.all()
+        # total_calculated = 0
+        # for product in list_products:
+        #     total_calculated += product.total
+        #
+        # # tutaj  zwrocic odpowiednia kwote za kazdym razem i napisac
+        # self.total = total_calculated
 
 
 class Payment(models.Model):
@@ -49,12 +52,19 @@ class Payment(models.Model):
 
 
 class OrderedProducts(models.Model):
-    pizza_name = models.CharField(max_length=20)  # dlaczego tutaj nie moze byc ManyToManyField
-    amount = models.IntegerField(default=1)
-    price = models.DecimalField(decimal_places=2, max_digits=5)
+    # pizza_name = models.CharField(max_length=20)  # dlaczego tutaj nie moze byc ManyToManyField
+    count = models.IntegerField(default=1)
+    total = models.DecimalField(decimal_places=2, max_digits=7)  # set_total
+    # price = models.DecimalField(decimal_places=2, max_digits=5)
     order = models.ForeignKey(Order, models.CASCADE, related_name='ordered_products')
+    product = models.ForeignKey(Pizza, models.CASCADE, related_name='ordered_pizzas')
 
     def __str__(self):
-        return f'zamowiona pizza to {self.pizza_name} w ilosc {self.amount} za {self.amount * self.price}'
+        # return f'zamowiona pizza to {self.pizza_name} w ilosc {self.amount} za {self.amount * self.price}'
+        return f'zamowiona pizza to {self.product.name} w ilosc {self.count} za {self.count * self.product.price}'
+
+    def set_total(self):
+        return self.product.price * self.product.count
+
 
 

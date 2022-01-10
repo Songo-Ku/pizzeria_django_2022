@@ -1,4 +1,5 @@
 from pizzeria.models import Restaurant, Pizza, Topping
+from pizzeria.serializers import PizzaSerializer
 from .models import Order, OrderedProducts, Payment
 from django.contrib.auth.models import User, Group
 from rest_framework import serializers
@@ -26,9 +27,13 @@ class PaymentSerializer(serializers.ModelSerializer):
 
 class OrderedProductsSerializer(serializers.ModelSerializer):
     # meals_name = serializers.ReadOnlyField(source='pizza.name')
-    order_pk = serializers.ReadOnlyField(source='order.name')
+    order_name = serializers.ReadOnlyField(source='order.name')
+    # serializowany_produkt = PizzaSerializer()  opracować to
 
     class Meta:
         model = OrderedProducts
-        fields = ['pk', 'pizza_name', 'amount', 'price', 'order', 'order_pk']
+        fields = ['pk', 'count', 'order', 'order_name', 'product']  #, 'serializowany_produkt'
+
+
+
 
