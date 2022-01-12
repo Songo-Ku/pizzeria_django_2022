@@ -1,6 +1,8 @@
 from .models import Order, OrderedProducts, Payment
 from .serializers import OrderSerializer, PaymentSerializer, OrderedProductsSerializer
 from rest_framework import viewsets
+from rest_framework import status
+from rest_framework.response import Response
 
 
 class OrderViewSet(viewsets.ModelViewSet):
@@ -26,6 +28,28 @@ class OrderedProductsViewSet(viewsets.ModelViewSet):
     serializer_class = OrderedProductsSerializer
     queryset = OrderedProducts.objects.all()
 
+    def get_serializer_class(self):
+
+        return super().get_serializer_class()
+
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        print('request data to: \n:', request.data)
+        print('serializer to: \n:', serializer)
+
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        headers = self.get_success_headers(serializer.data)
+        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+
+    def perform_create(self, serializer):
+        serializer.save()
+
+
+
+
+        # if self.action == 'create' or self.action == 'update':
+        #     return OrderedProductsCreateSerializer
     # def update(self, request, *args, **kwargs):
     #     partial = kwargs.pop('partial', False)
     #     instance = self.get_object()

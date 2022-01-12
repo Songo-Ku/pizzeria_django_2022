@@ -20,7 +20,7 @@ class Order(models.Model):
     def get_restaurant_name(self):
         restaurant = Restaurant.objects.filter(pk=self.id_restaurant)
         if len(restaurant) > 0:
-            return f'restaurant name: {restaurant[0].name}'
+            return f'{restaurant[0].name}'
         else:
             return 'Not added yet - Unknown'
 
@@ -57,14 +57,15 @@ class OrderedProducts(models.Model):
     total = models.DecimalField(decimal_places=2, max_digits=7)  # set_total
     # price = models.DecimalField(decimal_places=2, max_digits=5)
     order = models.ForeignKey(Order, models.CASCADE, related_name='ordered_products')
-    product = models.ForeignKey(Pizza, models.CASCADE, related_name='ordered_pizzas')
+    product = models.ForeignKey(Pizza, related_name='pizza_products', on_delete=models.CASCADE)
 
     def __str__(self):
         # return f'zamowiona pizza to {self.pizza_name} w ilosc {self.amount} za {self.amount * self.price}'
-        return f'zamowiona pizza to {self.product.name} w ilosc {self.count} za {self.count * self.product.price}'
+        # return f'zamowiona pizza to {self.product.name} w ilosc {self.count} za {self.count} * {self.product.price}'
+        return f'zamowiona pizza to {self.product.name} '
 
     def set_total(self):
-        return self.product.price * self.product.count
+        return self.product.price * self.count
 
 
 
