@@ -11,6 +11,22 @@ class RestaurantSerializer(serializers.ModelSerializer):
         fields = ['pk', 'name', 'address', 'phone_number', 'pizzas', 'created', 'modified']
 
 
+class RestaurantCreateSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Restaurant
+        fields = ['name', 'address', 'phone_number', 'pizzas']
+        read_only_fields = ('pk', 'modified', 'created')
+
+
+class RestaurantUpdateSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Restaurant
+        fields = ['address', 'phone_number', 'pizzas']
+        read_only_fields = ('name', 'pk', 'modified', 'created')
+
+
 class PizzaSerializer(serializers.ModelSerializer):
     # local = serializers.PrimaryKeyRelatedField()
     # local = PizzeriaRestaurantSerializer()

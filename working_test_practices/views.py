@@ -4,20 +4,20 @@ from rest_framework import status
 from rest_framework.response import Response
 
 
-# class RestaurantViewSet(viewsets.ViewSet):
-#     """
-#     A simple ViewSet for listing or retrieving users.
-#     """
-#     def list(self, request):
-#         queryset = Restaurant.objects.all()
-#         serializer = RestaurantSerializer(queryset, many=True)
-#         return Response(serializer.data)
-#
-#     def retrieve(self, request, pk=None):
-#         queryset = Restaurant.objects.all()
-#         restaurant = get_object_or_404(queryset, pk=pk)
-#         serializer = RestaurantSerializer(restaurant)
-#         return Response(serializer.data)
+class RestaurantViewSet(viewsets.ViewSet):
+    """
+    A simple ViewSet for listing or retrieving users.
+    """
+    def list(self, request):
+        queryset = Restaurant.objects.all()
+        serializer = RestaurantSerializer(queryset, many=True)
+        return Response(serializer.data)
+
+    def retrieve(self, request, pk=None):
+        queryset = Restaurant.objects.all()
+        restaurant = get_object_or_404(queryset, pk=pk)
+        serializer = RestaurantSerializer(restaurant)
+        return Response(serializer.data)
 
 
 # class RestaurantList(mixins.ListModelMixin,

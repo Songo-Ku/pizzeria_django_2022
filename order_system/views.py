@@ -29,13 +29,16 @@ class OrderedProductsViewSet(viewsets.ModelViewSet):
     queryset = OrderedProducts.objects.all()
 
     def get_serializer_class(self):
-
+        # if self.action == 'create' or self.action == 'update':
+        #     return OrderedProductsCreateSerializer
         return super().get_serializer_class()
 
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         print('request data to: \n:', request.data)
         print('serializer to: \n:', serializer)
+        print('serializer.data to: \n:', serializer.data)
+
 
         serializer.is_valid(raise_exception=True)
         self.perform_create(serializer)
@@ -44,12 +47,9 @@ class OrderedProductsViewSet(viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         serializer.save()
+        print('ten serializer bedzie save-wowany \n', serializer.data)
 
 
-
-
-        # if self.action == 'create' or self.action == 'update':
-        #     return OrderedProductsCreateSerializer
     # def update(self, request, *args, **kwargs):
     #     partial = kwargs.pop('partial', False)
     #     instance = self.get_object()

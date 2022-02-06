@@ -65,6 +65,7 @@ class OrderedProducts(models.Model):
         return f'zamowiona pizza to {self.product.name} '
 
     def set_total(self):
+        # pomyslec gdzie tego uzyc zeby pole self.total bylo uzupelnione w odpowiendim czasie odpowiednim wynikiem
         return self.product.price * self.count
 
 
