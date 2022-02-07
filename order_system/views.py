@@ -68,6 +68,4 @@ class OrderedProductsViewSet(viewsets.ModelViewSet):
     #     serializer.save()
 
 
-class Test(viewsets.ModelViewSet):
-    pass
 
