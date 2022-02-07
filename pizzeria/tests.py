@@ -1,5 +1,5 @@
 import json
-
+from django.test import TestCase
 from django.contrib.auth.models import User
 from django.urls import reverse
 from rest_framework.authtoken.models import Token
@@ -51,14 +51,20 @@ class ModelTestCase(TestCase):
     def setUp(self):
         """Define the test client and other test variables."""
         user = User.objects.create(username="nerd")
-        self.bucketlist_name = "Write world class code"
-        self.bucketlist = Bucketlist(name=self.bucketlist_name)
+        self.restaurant_name = "dominimum"
+        self.restaurant_address = "wolska 3"
+        self.restaurant_phone_number = 555
+        self.restaurant = Restaurant(
+            name=self.restaurant_name,
+            address=self.restaurant_address,
+            phone_number=self.restaurant_phone_number,
+        )
 
     def test_model_can_create_a_bucketlist(self):
         """Test the bucketlist model can create a bucketlist."""
-        old_count = Bucketlist.objects.count()
-        self.bucketlist.save()
-        new_count = Bucketlist.objects.count()
+        old_count = Restaurant.objects.count()
+        self.restaurant.save()
+        new_count = Restaurant.objects.count()
         self.assertNotEqual(old_count, new_count)
 
 
@@ -78,12 +84,6 @@ class RestaurantViewSetTestCase(APITestCase):
             address=self.restaurant_address,
             phone_number=self.restaurant_phone_number,
         )
-
-    def test_model_can_create_a_restaurant(self):
-        old_count = Restaurant.objects.count()
-        self.restaurant.save()
-        new_count = Restaurant.objects.count()
-        self.assertNotEqual(old_count, new_count)
 
     def test_add_restaurant(self):
         data_new_restaurant = {
