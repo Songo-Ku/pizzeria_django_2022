@@ -49,8 +49,11 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework.authtoken',
 
+    'djoser',
+
     'order_system',
     'pizzeria',
+    'auth_custom',
 ]
 
 MIDDLEWARE = [
@@ -144,7 +147,12 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework.authentication.SessionAuthentication',
         'rest_framework.authentication.TokenAuthentication',
-    )
+        'rest_framework.authentication.BasicAuthentication',
+
+    ),
+    'DEFAULT_PERMISSIONS_CLASSES': (
+        'rest_framework.permissions.IsAuthenticated',
+    ),
 }
 
 SITE_ID = 1

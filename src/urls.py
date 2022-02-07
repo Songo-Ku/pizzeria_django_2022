@@ -24,6 +24,10 @@ urlpatterns = [
 
     # path('api/', include(pizza_urls)),
     # path('router/', include(router)),
+    # path('auth/', include()),
+
+    path('auth-custom/', include('auth_custom.urls')),
+
     path('api/', include(router.urls)),
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     path("api/rest-auth/", include("rest_auth.urls")),

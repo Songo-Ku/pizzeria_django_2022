@@ -9,6 +9,7 @@ from .models import Restaurant, Topping, Pizza
 from .serializers import \
     RestaurantSerializer, ToppingSerializer, PizzaSerializer, RestaurantUpdateSerializer, RestaurantCreateSerializer
 from rest_framework import viewsets
+from rest_framework import permissions
 
 
 class RestaurantViewSet(viewsets.ModelViewSet):
@@ -17,6 +18,7 @@ class RestaurantViewSet(viewsets.ModelViewSet):
     """
     serializer_class = RestaurantSerializer
     queryset = Restaurant.objects.all()
+    permission_classes = [permissions.IsAuthenticated]
 
     def get_serializer_class(self):
         if self.action == 'create':
@@ -55,4 +57,6 @@ class PizzaViewSet(viewsets.ModelViewSet):
     """
     serializer_class = PizzaSerializer
     queryset = Pizza.objects.all()
+
+
 
