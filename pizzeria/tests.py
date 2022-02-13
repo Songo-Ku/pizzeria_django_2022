@@ -95,6 +95,7 @@ class RestaurantViewSetTestCase(APITestCase):
         response = self.client.post("/api/restaurants/", data_new_restaurant)
         # response = self.client.post("api/rest-auth/login/")
         self.assertEquals(response.status_code, status.HTTP_201_CREATED)
+        # test
 
 
     # zrobic update, delete, retrieve, etc.
