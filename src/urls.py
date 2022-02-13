@@ -4,7 +4,6 @@ from pizzeria.views import RestaurantViewSet, ToppingViewSet, PizzaViewSet
 from order_system.views import OrderViewSet, PaymentViewSet, OrderedProductsViewSet
 from rest_framework import routers
 
-
 # ---------------------------------------------------------
 # section router
 router = routers.DefaultRouter()
@@ -20,18 +19,13 @@ router.register(r'order-products', OrderedProductsViewSet, basename='order-produ
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    # path('api/', include('pizzeria.urls')),
-
-    # path('api/', include(pizza_urls)),
-    # path('router/', include(router)),
-    # path('auth/', include()),
 
     path('auth-custom/', include('auth_custom.urls')),
-
-    path('api/', include(router.urls)),
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     path("api/rest-auth/", include("rest_auth.urls")),
     path("api/rest-auth/registration/", include("rest_auth.registration.urls")),
+
+    path('api/', include(router.urls)),
 ]
 
 # urlpatterns = [
