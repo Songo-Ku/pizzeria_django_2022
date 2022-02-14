@@ -11,6 +11,9 @@ from .serializers import \
 from rest_framework import viewsets
 from rest_framework import permissions
 
+# create mixins from modelviewset
+from rest_framework.settings import api_settings
+
 
 class RestaurantViewSet(viewsets.ModelViewSet):
     """
@@ -18,7 +21,7 @@ class RestaurantViewSet(viewsets.ModelViewSet):
     """
     serializer_class = RestaurantSerializer
     queryset = Restaurant.objects.all()
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticated, permissions.IsAdminUser]
 
     def get_serializer_class(self):
         if self.action == 'create':
@@ -49,6 +52,61 @@ class ToppingViewSet(viewsets.ModelViewSet):
     """
     serializer_class = ToppingSerializer
     queryset = Topping.objects.all()
+    permission_classes = [permissions.IsAuthenticated]
+
+    def list(self, request, *args, **kwargs):
+        if request.GET:
+            print(request.GET)
+            print('to request GET')
+        if request.data:
+            print(request.data)
+        queryset = self.filter_queryset(self.get_queryset())
+
+        page = self.paginate_queryset(queryset)
+        if page is not None:
+            serializer = self.get_serializer(page, many=True)
+            return self.get_paginated_response(serializer.data)
+
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)
+
+
+    def create(self, request, *args, **kwargs):
+        if request.GET:
+            print(request.POST)
+            print('to request POST')
+        if request.data:
+            print(request.data, '\n reuqest data')
+            print(request.data.get("vote"))
+        if kwargs:
+            print(kwargs, '\n kwargs')
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        headers = self.get_success_headers(serializer.data)
+        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+
+
+class ToppingViewSetCustom(viewsets.ModelViewSet):
+    serializer_class = ToppingSerializer
+    queryset = Topping.objects.all()
+    permission_classes = [permissions.IsAuthenticated]
+
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        headers = self.get_success_headers(serializer.data)
+        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+
+    def perform_create(self, serializer):
+        serializer.save()
+
+    def get_success_headers(self, data):
+        try:
+            return {'Location': str(data[api_settings.URL_FIELD_NAME])}
+        except (TypeError, KeyError):
+            return {}
 
 
 class PizzaViewSet(viewsets.ModelViewSet):
@@ -69,5 +127,19 @@ class PizzaViewSet(viewsets.ModelViewSet):
 #         permission_classes = [IsAdminUser]
 #     return [permission() for permission in permission_classes]
 
+
+    # def get_permissions(self):
+    #     # Your logic should be all here
+    #     if self.request.method == 'GET':
+    #         self.permission_classes = [DummyPermission, ]
+    #     else:
+    #         self.permission_classes = [IsAuthenticated, ]
+    #
+    #     return super(UsersViewSet, self).get_permissions()
+#
+#     def update(self, request, *args, **kwargs):
+#         self.methods=('put',)
+#         self.permission_classes = (permissions.CustomPermissions,)
+#         return super(self.__class__, self).update(request, *args, **kwargs)
 
 

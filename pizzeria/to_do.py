@@ -21,6 +21,6 @@ router.register('/votes', VoteViewSet, 'votes')
 
 # tests.py
 def test_vote_create(self):
-	response = self.client.post(reverse('votes'), date={'vote': 4, 'chooice': 3})
+	response = self.client.post(reverse('votes'), data={'vote': 4, 'chooice': 3})
 	# 127.0.0.1:8000/votes
 	self.assertEqual(response.status_code, 201)
