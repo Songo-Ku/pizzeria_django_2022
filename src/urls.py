@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.urls import path, include
-from pizzeria.views import RestaurantViewSet, ToppingViewSet, PizzaViewSet
+from pizzeria.views import RestaurantViewSet, ToppingViewSet, PizzaViewSet, ToppingViewSetCustom
 from order_system.views import OrderViewSet, PaymentViewSet, OrderedProductsViewSet
 from rest_framework import routers
 
@@ -10,6 +10,7 @@ router = routers.DefaultRouter()
 # pizzeria app
 router.register(r'restaurants', RestaurantViewSet, basename='restaurant')
 router.register(r'toppings', ToppingViewSet, basename='topping')
+router.register(r'newtoppings', ToppingViewSetCustom, basename='topping')
 router.register(r'pizzas', PizzaViewSet, basename='pizza')
 # order system app
 router.register(r'orders', OrderViewSet, basename='orders')
@@ -27,11 +28,3 @@ urlpatterns = [
 
     path('api/', include(router.urls)),
 ]
-
-# urlpatterns = [
-#     path('admin/', admin.site.urls),
-#     path("api/", include("profiles.api.urls")),
-#     path("api-auth/", include("rest_framework.urls")),
-#     path("api/rest-auth/", include("rest_auth.urls")),
-#     path("api/rest-auth/registration/", include("rest_auth.registration.urls"))
-# ]

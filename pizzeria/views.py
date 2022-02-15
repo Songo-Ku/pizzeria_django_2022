@@ -21,7 +21,7 @@ class RestaurantViewSet(viewsets.ModelViewSet):
     """
     serializer_class = RestaurantSerializer
     queryset = Restaurant.objects.all()
-    permission_classes = [permissions.IsAuthenticated, permissions.IsAdminUser]
+    permission_classes = [permissions.IsAuthenticated,]
 
     def get_serializer_class(self):
         if self.action == 'create':
@@ -54,32 +54,10 @@ class ToppingViewSet(viewsets.ModelViewSet):
     queryset = Topping.objects.all()
     permission_classes = [permissions.IsAuthenticated]
 
-    def list(self, request, *args, **kwargs):
-        if request.GET:
-            print(request.GET)
-            print('to request GET')
-        if request.data:
-            print(request.data)
-        queryset = self.filter_queryset(self.get_queryset())
-
-        page = self.paginate_queryset(queryset)
-        if page is not None:
-            serializer = self.get_serializer(page, many=True)
-            return self.get_paginated_response(serializer.data)
-
-        serializer = self.get_serializer(queryset, many=True)
-        return Response(serializer.data)
-
-
     def create(self, request, *args, **kwargs):
-        if request.GET:
-            print(request.POST)
-            print('to request POST')
         if request.data:
             print(request.data, '\n reuqest data')
             print(request.data.get("vote"))
-        if kwargs:
-            print(kwargs, '\n kwargs')
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         self.perform_create(serializer)
@@ -93,6 +71,12 @@ class ToppingViewSetCustom(viewsets.ModelViewSet):
     permission_classes = [permissions.IsAuthenticated]
 
     def create(self, request, *args, **kwargs):
+        if request.data:
+            print(request.data, '\n reuqest data')
+            print(request.data.get("vote"))
+        if request.data:
+            print(request.data, '\n reuqest data')
+            print(request.data.get("choice"))
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         self.perform_create(serializer)
