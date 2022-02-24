@@ -59,3 +59,5 @@ class RestaurantViewSetTestCase(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(Restaurant.objects.count(), 1)
         self.assertEqual(Restaurant.objects.get(id=self.restaurant.id).name, self.restaurant.name)
+
+
