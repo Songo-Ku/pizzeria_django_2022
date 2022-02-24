@@ -45,6 +45,16 @@ class RestaurantViewSet(viewsets.ModelViewSet):
         print('serializer.data to: \n:', serializer.data)
         print('ten serializer bedzie save-wowany \n', serializer.data)
 
+    def get_permissions(self):
+        """
+        Instantiates and returns the list of permissions that this view requires.
+        """
+        if self.action == 'list':
+            permission_classes = []
+        else:
+            permission_classes = [permissions.IsAuthenticated]
+        return [permission() for permission in permission_classes]
+
 
 class ToppingViewSet(viewsets.ModelViewSet):
     """
@@ -99,17 +109,17 @@ class PizzaViewSet(viewsets.ModelViewSet):
     """
     serializer_class = PizzaSerializer
     queryset = Pizza.objects.all()
+    permission_classes = [permissions.IsAuthenticated]
 
-
-# def get_permissions(self):
-#     """
-#     Instantiates and returns the list of permissions that this view requires.
-#     """
-#     if self.action == 'list':
-#         permission_classes = [IsAuthenticated]
-#     else:
-#         permission_classes = [IsAdminUser]
-#     return [permission() for permission in permission_classes]
+    def get_permissions(self):
+        """
+        Instantiates and returns the list of permissions that this view requires.
+        """
+        if self.action == 'list':
+            permission_classes = [permissions.IsAuthenticated]
+        else:
+            permission_classes = [permissions.IsAuthenticated]
+        return [permission() for permission in permission_classes]
 
 
     # def get_permissions(self):

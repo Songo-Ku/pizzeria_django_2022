@@ -55,9 +55,14 @@ class RestaurantViewSetTestCase(APITestCase):
 
     def test_get_list_restaurants(self):
         url = reverse('restaurant-list')
+        restaurant = Restaurant.objects.create(
+            name=self.restaurant_name,
+            address=self.restaurant_address,
+            phone_number=self.restaurant_phone_number,
+        )
         response = self.client.get(url)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(Restaurant.objects.count(), 1)
-        self.assertEqual(Restaurant.objects.get(id=self.restaurant.id).name, self.restaurant.name)
+        self.assertEqual(Restaurant.objects.get(id=restaurant.id).name, restaurant.name)
 
 
