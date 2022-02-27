@@ -27,8 +27,7 @@ class ModelTestCase(TestCase):
             phone_number=self.restaurant_phone_number,
         )
 
-    def test_model_can_create_a_bucketlist(self):
-        """Test the bucketlist model can create a bucketlist."""
+    def test_model_can_create_restaurant(self):
         old_count = Restaurant.objects.count()
         self.restaurant.save()
         new_count = Restaurant.objects.count()

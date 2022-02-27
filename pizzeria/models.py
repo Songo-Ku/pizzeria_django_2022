@@ -7,6 +7,7 @@ class Restaurant(models.Model):
     phone_number = models.IntegerField()
     created = models.DateTimeField(auto_now_add=True)
     modified = models.DateTimeField(auto_now=True)
+    owner = models.ForeignKey('auth.User', related_name='restaurants', on_delete=models.CASCADE)
 
     def __str__(self):
         return f'{self.name}'

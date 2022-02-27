@@ -55,6 +55,11 @@ class RestaurantViewSet(viewsets.ModelViewSet):
             permission_classes = [permissions.IsAuthenticated]
         return [permission() for permission in permission_classes]
 
+    def get_queryset(self):
+        if self.request.user.is_staff:
+            return Restaurant.objects.all()
+        return Restaurant.objects.filter(user=self.request.user)
+
 
 class ToppingViewSet(viewsets.ModelViewSet):
     """
