@@ -16,7 +16,9 @@ from pizzeria.serializers import \
 
 
 class RestaurantViewSetTestCase(APITestCase):
-    # list_url = reverse("restaurant-list")
+    # restaurant_list_url = reverse("restaurant-list")
+    restaurant_list_url = '/api/restaurants/{}/'
+
     def setUp(self):
         self.user = User.objects.create(username="nerd")
         self.client.force_authenticate(user=self.user)
@@ -59,10 +61,24 @@ class RestaurantViewSetTestCase(APITestCase):
             name=self.restaurant_name,
             address=self.restaurant_address,
             phone_number=self.restaurant_phone_number,
+            owner=self.user
         )
         response = self.client.get(url)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(Restaurant.objects.count(), 1)
         self.assertEqual(Restaurant.objects.get(id=restaurant.id).name, restaurant.name)
 
+    # tdd assumptions
+    def test_get_returns_json_200_ok(self):
+        restaurant_ = Restaurant.objects.create(
+            name=self.restaurant_name,
+            address=self.restaurant_address,
+            phone_number=self.restaurant_phone_number,
+            owner=self.user
+        )
+        response = self.client.get(self.restaurant_list_url.format(restaurant_.id))
 
+        print(self.restaurant_list_url.format(restaurant_.id))
+        print('respones: \n', response)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response['content-type'], 'application/json')

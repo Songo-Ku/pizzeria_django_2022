@@ -16,7 +16,7 @@ class AccesToViewSetWithoutLoggedTestCase(APITestCase):
     def test_get_list_restaurants(self):
         url_restaurant = reverse('restaurant-list')
         response = self.client.get(url_restaurant)
-        self.assertEquals(response.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEquals(response.status_code, status.HTTP_200_OK)
 
     def test_get_list_toppings(self):
         url_topping = reverse('topping-list')

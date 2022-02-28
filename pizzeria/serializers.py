@@ -5,14 +5,12 @@ from django.utils import timezone
 from rest_framework.authtoken.models import Token
 
 
-
 class RestaurantSerializer(serializers.ModelSerializer):
-    owner = serializers.ReadOnlyField(source='owner.username')
 
     class Meta:
         model = Restaurant
-        fields = ['pk', 'name', 'address', 'phone_number', 'pizzas', 'created', 'modified']
-        read_only_fields = ('pk', 'modified', 'created', 'owner')
+        fields = ['pk', 'name', 'address', 'phone_number', 'pizzas', 'created', 'modified', 'owner']
+        read_only_fields = ('pk', 'modified', 'created')
 
 
 class RestaurantCreateSerializer(serializers.ModelSerializer):
@@ -23,18 +21,14 @@ class RestaurantCreateSerializer(serializers.ModelSerializer):
         read_only_fields = ('pk', 'modified', 'created')
 
     def create(self, validated_data):
+        print('to sa validated data z restaurant create serialzier: \n', validated_data)
         restaurant = Restaurant(
             name=validated_data['name'],
             address=validated_data['address'],
             phone_number=validated_data['phone_number'],
+            owner=validated_data['owner']
         )
-        if self.request.user:
-            restaurant.owner = self.request.user
         restaurant.save()
-
-        # Token.objects.create(user=user)
-        print('token utworzony')
-        # print('user token \n ', user.auth_token.key)
         return restaurant
 
 
@@ -47,11 +41,6 @@ class RestaurantUpdateSerializer(serializers.ModelSerializer):
 
 
 class PizzaSerializer(serializers.ModelSerializer):
-    # local = serializers.PrimaryKeyRelatedField()
-    # local = PizzeriaRestaurantSerializer()
-    # local = serializers.ReadOnlyField(source='local.pk')  # to na pewno nie jest odpowiednie pole dla tego przypadku
-
-    # owner = serializers.ReadOnlyField(source='owner.username')
     restaurant_name = serializers.ReadOnlyField(source='restaurant.name')
     modified = serializers.ReadOnlyField()
 

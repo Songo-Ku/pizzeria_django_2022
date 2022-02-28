@@ -12,7 +12,7 @@ from pizzeria.serializers import \
     PizzaSerializer, RestaurantUpdateSerializer, RestaurantCreateSerializer, RestaurantSerializer, ToppingSerializer
 
 
-class ModelTestCase(TestCase):
+class RestaurantModelTestCase(TestCase):
     """This class defines the test suite for the bucketlist model."""
 
     def setUp(self):
@@ -25,6 +25,7 @@ class ModelTestCase(TestCase):
             name=self.restaurant_name,
             address=self.restaurant_address,
             phone_number=self.restaurant_phone_number,
+            owner=user
         )
 
     def test_model_can_create_restaurant(self):

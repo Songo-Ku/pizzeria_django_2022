@@ -15,13 +15,42 @@ from rest_framework import permissions
 from rest_framework.settings import api_settings
 
 
+
+from django.contrib.auth.models import User
+
+
 class RestaurantViewSet(viewsets.ModelViewSet):
     """
     A viewset for viewing and editing user instances.
     """
     serializer_class = RestaurantSerializer
     queryset = Restaurant.objects.all()
-    permission_classes = [permissions.IsAuthenticated,]
+    permission_classes = [permissions.IsAuthenticated]
+
+    def list(self, request, *args, **kwargs):
+        queryset = self.filter_queryset(self.get_queryset())
+        # user = User.objects.create(username="nerd")
+        # print(user)
+
+        # restaurant = Restaurant.objects.create(
+        #     name='nazwa2',
+        #     address='adres',
+        #     phone_number=55,
+        #     owner=self.request.user
+        # )
+        # obiekciki = Restaurant.objects.all()
+        # print('to jest queryset', queryset, '\n', obiekciki)
+        print(request.GET)
+        print(request.user)
+        # AnonymousUser
+
+        page = self.paginate_queryset(queryset)
+        if page is not None:
+            serializer = self.get_serializer(page, many=True)
+            return self.get_paginated_response(serializer.data)
+
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)
 
     def get_serializer_class(self):
         if self.action == 'create':
@@ -32,18 +61,20 @@ class RestaurantViewSet(viewsets.ModelViewSet):
 
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
-        print('request data to: \n:', request.data)
+        # print('request data to: \n:', request.data)
 
         serializer.is_valid(raise_exception=True)
-        print('serializer to: \n:', serializer)
+        # print('serializer to: \n:', serializer)
         self.perform_create(serializer)
         headers = self.get_success_headers(serializer.data)
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
     def perform_create(self, serializer):
-        serializer.save()
-        print('serializer.data to: \n:', serializer.data)
-        print('ten serializer bedzie save-wowany \n', serializer.data)
+        print(self.request.user, '\n jest w perform create')
+        serializer.save(owner=self.request.user)  # to musi byc w przeciwnym razie nie bedzie dobrze przekazany owner
+        restaurants = Restaurant.objects.all()
+        print('to sa restauracje po perform create', restaurants)
+
 
     def get_permissions(self):
         """
@@ -54,11 +85,6 @@ class RestaurantViewSet(viewsets.ModelViewSet):
         else:
             permission_classes = [permissions.IsAuthenticated]
         return [permission() for permission in permission_classes]
-
-    def get_queryset(self):
-        if self.request.user.is_staff:
-            return Restaurant.objects.all()
-        return Restaurant.objects.filter(user=self.request.user)
 
 
 class ToppingViewSet(viewsets.ModelViewSet):
