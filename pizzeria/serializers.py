@@ -21,15 +21,17 @@ class RestaurantCreateSerializer(serializers.ModelSerializer):
         read_only_fields = ('pk', 'modified', 'created')
 
     def create(self, validated_data):
-        print('to sa validated data z restaurant create serialzier: \n', validated_data)
-        restaurant = Restaurant(
-            name=validated_data['name'],
-            address=validated_data['address'],
-            phone_number=validated_data['phone_number'],
-            owner=validated_data['owner']
-        )
-        restaurant.save()
-        return restaurant
+        validated_data['owner'] = self.context['request'].user
+        return super(RestaurantCreateSerializer, self).create(validated_data)
+        # print('to sa validated data z restaurant create serialzier: \n', validated_data)
+        # restaurant = Restaurant(
+        #     name=validated_data['name'],
+        #     address=validated_data['address'],
+        #     phone_number=validated_data['phone_number'],
+        #     owner=validated_data['owner']
+        # )
+        # restaurant.save()
+        # return restaurant
 
 
 class RestaurantUpdateSerializer(serializers.ModelSerializer):

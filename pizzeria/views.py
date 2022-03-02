@@ -29,20 +29,13 @@ class RestaurantViewSet(viewsets.ModelViewSet):
 
     def list(self, request, *args, **kwargs):
         queryset = self.filter_queryset(self.get_queryset())
-        # user = User.objects.create(username="nerd")
-        # print(user)
+        # tu zwrocic odpowiedni filter dla listviewset w momencie kidy user ma swoje lokale jak nie ma to zwrocic pusta
+        # a jak ma tylko kilka to kilka
 
-        # restaurant = Restaurant.objects.create(
-        #     name='nazwa2',
-        #     address='adres',
-        #     phone_number=55,
-        #     owner=self.request.user
-        # )
-        # obiekciki = Restaurant.objects.all()
-        # print('to jest queryset', queryset, '\n', obiekciki)
-        print(request.GET)
-        print(request.user)
-        # AnonymousUser
+
+
+
+
 
         page = self.paginate_queryset(queryset)
         if page is not None:
@@ -59,21 +52,23 @@ class RestaurantViewSet(viewsets.ModelViewSet):
             return RestaurantUpdateSerializer
         return super().get_serializer_class()
 
-    def create(self, request, *args, **kwargs):
-        serializer = self.get_serializer(data=request.data)
-        # print('request data to: \n:', request.data)
-
-        serializer.is_valid(raise_exception=True)
-        # print('serializer to: \n:', serializer)
-        self.perform_create(serializer)
-        headers = self.get_success_headers(serializer.data)
-        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
-
-    def perform_create(self, serializer):
-        print(self.request.user, '\n jest w perform create')
-        serializer.save(owner=self.request.user)  # to musi byc w przeciwnym razie nie bedzie dobrze przekazany owner
-        restaurants = Restaurant.objects.all()
-        print('to sa restauracje po perform create', restaurants)
+    # def create(self, request, *args, **kwargs):
+    #     data = request.data
+    #     data['owner'] = request.user
+    #     serializer = self.get_serializer(data=data)
+    #     # print('request data to: \n:', request.data)
+    #
+    #     serializer.is_valid(raise_exception=True)
+    #     # print('serializer to: \n:', serializer)
+    #     self.perform_create(serializer)
+    #     headers = self.get_success_headers(serializer.data)
+    #     return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+    #
+    # def perform_create(self, serializer):
+    #     print(self.request.user, '\n jest w perform create')
+    #     serializer.save(owner=self.request.user)  # to musi byc w przeciwnym razie nie bedzie dobrze przekazany owner
+    #     restaurants = Restaurant.objects.all()
+    #     print('to sa restauracje po perform create', restaurants)
 
 
     def get_permissions(self):
