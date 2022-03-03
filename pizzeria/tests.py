@@ -11,8 +11,7 @@ from pizzeria.models import Pizza, Restaurant, Topping
 from pizzeria.serializers import \
     PizzaSerializer, RestaurantUpdateSerializer, RestaurantCreateSerializer, RestaurantSerializer, ToppingSerializer
 
-from unittest.mock import Mock, MagicMock
 
-restauracja_class = Restaurant
+
 
 
