@@ -43,17 +43,16 @@ INSTALLED_APPS = [
     'allauth.account',
     'allauth.socialaccount',
 
-    'rest_auth',
-    'rest_auth.registration',
+    # 'rest_auth',
+    # 'rest_auth.registration',
 
     'rest_framework',
     'rest_framework.authtoken',
 
-    'djoser',
 
     'order_system',
     'pizzeria',
-    'auth_custom',
+    # 'auth_custom',
 ]
 
 MIDDLEWARE = [
