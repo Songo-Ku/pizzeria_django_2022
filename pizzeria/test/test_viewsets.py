@@ -25,7 +25,7 @@ class RestaurantViewSetTestCase(APITestCase):
         cls.restaurant_list_url = reverse("restaurant-list")
         cls.user1 = UserFactory()
         cls.restaurant1 = RestaurantFactory(owner=cls.user1)
-        print('to jest user factory', cls.user1)
+        print('to jest UserFactory \n', cls.user1)
         super().setUpClass()
 
     def setUp(self):
@@ -34,12 +34,6 @@ class RestaurantViewSetTestCase(APITestCase):
         self.restaurant_name = "dominimum"
         self.restaurant_address = "wolska 3"
         self.restaurant_phone_number = 555
-        self.restaurant = Restaurant(
-            name=self.restaurant_name,
-            address=self.restaurant_address,
-            phone_number=self.restaurant_phone_number,
-            owner=self.user
-        )
         self.amount = Restaurant.objects.count()
 
     def post_correct_input_restaurant(self):
@@ -47,6 +41,7 @@ class RestaurantViewSetTestCase(APITestCase):
             "name": self.restaurant_name,
             "address": self.restaurant_address,
             "phone_number": self.restaurant_phone_number,
+            "owner": self.user1,
         }
         return self.client.post(self.restaurant_list_url, data=valid_restaurant)
 
@@ -64,29 +59,18 @@ class RestaurantViewSetTestCase(APITestCase):
 
     def test_post_correct_input_restaurant_saved_to_db(self):
         response = self.post_correct_input_restaurant()
-        self.assertEquals(Restaurant.objects.count(), 1)
-        self.assertEqual(Restaurant.objects.get().name, self.restaurant_name)
+        self.assertEquals(Restaurant.objects.count(), 2)
+        self.assertEqual(Restaurant.objects.get(name=self.restaurant_name).name, self.restaurant_name)
 
     def test_post_incorrect_input_restaurant_saved_to_db(self):
         response = self.post_incorrect_input_restaurant()
-        self.assertEquals(Restaurant.objects.count(), 0)
+        self.assertEquals(Restaurant.objects.count(), 1)
 
     def test_get_list_restaurants(self):
-        # restaurant = Restaurant.objects.create(
-        #     name=self.restaurant_name,
-        #     address=self.restaurant_address,
-        #     phone_number=self.restaurant_phone_number,
-        #     owner=self.user
-        # )
-        self.restaurant.save()
         response = self.client.get(self.restaurant_list_url)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(Restaurant.objects.count(), 1)
-        self.assertEqual(Restaurant.objects.get(id=self.restaurant.id).name, self.restaurant.name)
-        # response = self.client.get(self.restaurant_list_url)
-        # self.assertEqual(response.status_code, status.HTTP_200_OK)
-        # self.assertEqual(Restaurant.objects.count(), 1)
-        # self.assertEqual(Restaurant.objects.get(id=restaurant.id).name, restaurant.name)
+        self.assertEqual(Restaurant.objects.get(id=self.restaurant1.id).name, self.restaurant1.name)
 
     # tdd assumptions
     def test_get_restaurant_detail_status(self):
@@ -94,13 +78,53 @@ class RestaurantViewSetTestCase(APITestCase):
             name=self.restaurant_name,
             address=self.restaurant_address,
             phone_number=self.restaurant_phone_number,
-            owner=self.user
+            owner=self.user1
         )
         response = self.client.get(self.restaurant_detail_url.format(restaurant_.id))
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data.get('owner'), self.user.id)
+        self.assertEqual(response.data.get('owner'), self.user1.id)
         self.assertEqual(response.data.get('pk'), restaurant_.id)
         self.assertEqual(response['content-type'], 'application/json')
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 #
 # class PizzaAPITest(TestCase):

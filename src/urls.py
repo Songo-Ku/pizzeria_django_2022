@@ -20,11 +20,9 @@ router.register(r'order-products', OrderedProductsViewSet, basename='order-produ
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-
     # path('auth-custom/', include('auth_custom.urls')),  # to nie sluzy do logowania
     # path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     path("api/rest-auth/", include("rest_auth.urls")),
     path("api/rest-auth/registration/", include("rest_auth.registration.urls")),
-
     path('api/', include(router.urls)),
 ]

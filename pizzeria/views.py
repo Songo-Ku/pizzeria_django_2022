@@ -29,14 +29,6 @@ class RestaurantViewSet(viewsets.ModelViewSet):
 
     def list(self, request, *args, **kwargs):
         queryset = self.filter_queryset(self.get_queryset())
-        # tu zwrocic odpowiedni filter dla listviewset w momencie kidy user ma swoje lokale jak nie ma to zwrocic pusta
-        # a jak ma tylko kilka to kilka
-
-
-
-
-
-
         page = self.paginate_queryset(queryset)
         if page is not None:
             serializer = self.get_serializer(page, many=True)

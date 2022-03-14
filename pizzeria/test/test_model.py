@@ -7,6 +7,7 @@ from rest_framework.test import APITestCase, APIRequestFactory, APIClient
 
 from rest_framework import status
 
+from pizzeria.factories import UserFactory, RestaurantFactory
 from pizzeria.models import Pizza, Restaurant, Topping
 from pizzeria.serializers import \
     PizzaSerializer, RestaurantUpdateSerializer, RestaurantCreateSerializer, RestaurantSerializer, ToppingSerializer
@@ -17,22 +18,27 @@ class RestaurantModelTestCase(TestCase):
 
     def setUp(self):
         """Define the test client and other test variables."""
-        user = User.objects.create(username="nerd")
-        self.restaurant_name = "dominimum"
-        self.restaurant_address = "wolska 3"
-        self.restaurant_phone_number = 555
-        self.restaurant = Restaurant(
-            name=self.restaurant_name,
-            address=self.restaurant_address,
-            phone_number=self.restaurant_phone_number,
-            owner=user
-        )
+        self.user1 = UserFactory()
+        print(self.user1)
+        print(self.user1.username)
+        self.old_count_restaurant = Restaurant.objects.count()
+        self.restaurant1 = RestaurantFactory(owner=self.user1)
+
+
+        # user = User.objects.create(username="nerd")
+        # self.restaurant_name = "dominimum"
+        # self.restaurant_address = "wolska 3"
+        # self.restaurant_phone_number = 555
+        # self.restaurant = Restaurant(
+        #     name=self.restaurant_name,
+        #     address=self.restaurant_address,
+        #     phone_number=self.restaurant_phone_number,
+        #     owner=user
+        # )
 
     def test_model_can_create_restaurant(self):
-        old_count = Restaurant.objects.count()
-        self.restaurant.save()
         new_count = Restaurant.objects.count()
-        self.assertNotEqual(old_count, new_count)
+        self.assertNotEqual(self.old_count_restaurant, new_count)
 
 
 
