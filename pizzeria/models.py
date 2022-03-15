@@ -13,16 +13,6 @@ class Restaurant(models.Model):
         return f'{self.name}'
 
 
-class Topping(models.Model):
-    name = models.CharField(max_length=100)
-    price = models.DecimalField(decimal_places=2, max_digits=5)
-    supplier = models.CharField(max_length=100)
-    meals = models.ManyToManyField('Pizza')
-
-    def __str__(self):
-        return f'{self.name}'
-
-
 class Pizza(models.Model):
     name = models.CharField(max_length=100)
     price = models.DecimalField(decimal_places=2, max_digits=5)
@@ -33,6 +23,26 @@ class Pizza(models.Model):
 
     def __str__(self):
         return f' {self.name} from {self.restaurant.name}'
+
+
+class Topping(models.Model):
+    name = models.CharField(max_length=100)
+    price = models.DecimalField(decimal_places=2, max_digits=5)
+    supplier = models.CharField(max_length=100)
+    meals = models.ManyToManyField(Pizza)  # czy taka konstrukcja through ma sens ?
+    # moze jest jakas konwencja nazywania tego ?
+
+    def __str__(self):
+        return f'{self.name}'
+
+
+# class PizzaTopping(models.Model):
+#     topping = models.ForeignKey(Topping, on_delete=models.CASCADE)
+#     pizza = models.ForeignKey(Pizza, on_delete=models.CASCADE)
+#
+#     def __str__(self):
+#         return f'{self.topping.name} dla pizzy:  {self.pizza.name}'
+
 
 
 

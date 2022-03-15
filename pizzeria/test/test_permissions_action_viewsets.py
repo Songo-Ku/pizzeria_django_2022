@@ -26,5 +26,5 @@ class AccesToViewSetWithoutLoggedTestCase(APITestCase):
     def test_get_list_pizza(self):
         url_pizza = reverse('pizza-list')
         response = self.client.get(url_pizza)
-        self.assertEquals(response.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEquals(response.status_code, status.HTTP_200_OK)
 

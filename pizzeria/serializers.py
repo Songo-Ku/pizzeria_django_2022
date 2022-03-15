@@ -51,6 +51,13 @@ class PizzaSerializer(serializers.ModelSerializer):
         fields = ['pk', 'name', 'price', 'description', 'restaurant', 'restaurant_name', 'modified']
 
 
+class PizzaCreateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Pizza
+        fields = ['name', 'price', 'description', 'restaurant']
+        read_only_fields = ('pk', 'modified', 'created')
+
+
 class ToppingSerializer(serializers.ModelSerializer):
     meals_name = serializers.ReadOnlyField(source='pizza.name')
 

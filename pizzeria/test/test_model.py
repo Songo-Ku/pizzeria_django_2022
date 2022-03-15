@@ -14,7 +14,6 @@ from pizzeria.serializers import \
 
 
 class RestaurantModelTestCase(TestCase):
-    """This class defines the test suite for the bucketlist model."""
 
     def setUp(self):
         """Define the test client and other test variables."""
@@ -23,18 +22,6 @@ class RestaurantModelTestCase(TestCase):
         print(self.user1.username)
         self.old_count_restaurant = Restaurant.objects.count()
         self.restaurant1 = RestaurantFactory(owner=self.user1)
-
-
-        # user = User.objects.create(username="nerd")
-        # self.restaurant_name = "dominimum"
-        # self.restaurant_address = "wolska 3"
-        # self.restaurant_phone_number = 555
-        # self.restaurant = Restaurant(
-        #     name=self.restaurant_name,
-        #     address=self.restaurant_address,
-        #     phone_number=self.restaurant_phone_number,
-        #     owner=user
-        # )
 
     def test_model_can_create_restaurant(self):
         new_count = Restaurant.objects.count()

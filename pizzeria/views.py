@@ -7,7 +7,8 @@ from rest_framework.reverse import reverse
 from rest_framework import mixins, generics, renderers
 from .models import Restaurant, Topping, Pizza
 from .serializers import \
-    RestaurantSerializer, ToppingSerializer, PizzaSerializer, RestaurantUpdateSerializer, RestaurantCreateSerializer
+    RestaurantSerializer, ToppingSerializer, PizzaSerializer, RestaurantUpdateSerializer, RestaurantCreateSerializer, \
+    PizzaCreateSerializer
 from rest_framework import viewsets
 from rest_framework import permissions
 
@@ -64,9 +65,6 @@ class RestaurantViewSet(viewsets.ModelViewSet):
 
 
     def get_permissions(self):
-        """
-        Instantiates and returns the list of permissions that this view requires.
-        """
         if self.action == 'list':
             permission_classes = []
         else:
@@ -122,19 +120,20 @@ class ToppingViewSetCustom(viewsets.ModelViewSet):
 
 
 class PizzaViewSet(viewsets.ModelViewSet):
-    """
-    A viewset for viewing and editing user instances.
-    """
     serializer_class = PizzaSerializer
     queryset = Pizza.objects.all()
     permission_classes = [permissions.IsAuthenticated]
 
+    def get_serializer_class(self):
+        if self.action == 'create':
+            return PizzaCreateSerializer
+        # elif self.action == 'update':
+        #     return PizzaUpdateSerializer
+        return super().get_serializer_class()
+
     def get_permissions(self):
-        """
-        Instantiates and returns the list of permissions that this view requires.
-        """
         if self.action == 'list':
-            permission_classes = [permissions.IsAuthenticated]
+            permission_classes = []
         else:
             permission_classes = [permissions.IsAuthenticated]
         return [permission() for permission in permission_classes]
