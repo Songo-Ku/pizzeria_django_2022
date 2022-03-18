@@ -17,7 +17,6 @@ class RegistrationLoginTestCase(APITestCase):
         self.token = Token.objects.create(user=self.user)
 
     def test_registration(self):
-
         data_registration = {
             "username": "test5",
             "email": "test12345@test.pl",
@@ -25,7 +24,6 @@ class RegistrationLoginTestCase(APITestCase):
             "password2": "Test/12345"
         }
         response = self.client.post("/api/rest-auth/registration/", data_registration)
-        # response = self.client.post("api/rest-auth/login/")
         self.assertEquals(response.status_code, status.HTTP_201_CREATED)
 
     def test_login(self):
@@ -35,16 +33,18 @@ class RegistrationLoginTestCase(APITestCase):
             "password": "Test123456/"
         }
         response = self.client.post("/api/rest-auth/login/", data_login)
-        # response = self.client.post("api/rest-auth/login/")
         self.assertEquals(response.status_code, status.HTTP_200_OK)
 
 
 class UsersApiTestCase(APITestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls.rest_auth_user_uri = '/api/rest-auth/user/'
+        super().setUpClass()
 
     def setUp(self):
         self.user = User.objects.create_user(
             username="test6",
-            # email="test123456@test.pl",
             password="Test123456/",
         )
         self.token = Token.objects.create(user=self.user)
@@ -52,8 +52,11 @@ class UsersApiTestCase(APITestCase):
         print(self.token)
 
     def test_get_user(self):
-        response = self.client.get(f'/auth-custom/users/{self.user.id}/')
-        self.assertEqual(response.data, {'id': self.user.id, 'username': self.user.username, 'email': ''})
+        response = self.client.get(self.rest_auth_user_uri)
+        self.assertEqual(
+            response.data,
+            {'pk': self.user.id, 'username': self.user.username, 'email': '', 'first_name': '', 'last_name': ''}
+        )
 
 
 
