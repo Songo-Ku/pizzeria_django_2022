@@ -13,7 +13,6 @@ from rest_framework.test import APITestCase, APIRequestFactory, APIClient, URLPa
 from rest_framework import status
 from rest_framework import routers
 
-
 from pizzeria.factories import UserFactory, RestaurantFactory, PizzaFactory, ToppingFactory
 
 
@@ -161,14 +160,6 @@ class PizzaViewSetTestCase(APITestCase):
         self.assertEqual(response['content-type'], 'application/json')
 
 
-
-
-
-
-
-
-
-
 class ToppingViewSetTestCase(APITestCase):
     topping_detail_uri = '/api/toppings/{}/'
 
@@ -178,11 +169,14 @@ class ToppingViewSetTestCase(APITestCase):
         cls.user1 = UserFactory()
         cls.restaurant1 = RestaurantFactory(owner=cls.user1)
         cls.pizza1 = PizzaFactory(restaurant=cls.restaurant1)
+        cls.pizza2 = PizzaFactory(restaurant=cls.restaurant1)
+
         print('cls pizza1: \n', cls.pizza1, '\n')
         # cls.topping1 = ToppingFactory()
-        cls.topping1 = ToppingFactory.create(meals=(cls.pizza1))
+        cls.topping1 = ToppingFactory.create(meals=[cls.pizza1, cls.pizza2])
+        cls.topping2 = ToppingFactory.create(meals=[cls.pizza2])
 
-
+        # https://factoryboy.readthedocs.io/en/stable/recipes.html dokuemntacja
 
         print('\n to topping1:       ', cls.topping1)
         print('\n to meals z topping1:       ', cls.topping1.meals)

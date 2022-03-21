@@ -28,7 +28,7 @@ class RestaurantCreateSerializer(serializers.ModelSerializer):
 class RestaurantUpdateSerializer(serializers.ModelSerializer):
 
     class Meta:
-        model = Restaurantgit a
+        model = Restaurant
         fields = ['name', 'address', 'phone_number', 'pizzas', 'owner', 'modified', 'created']
         read_only_fields = ('name', 'pk', 'modified', 'created', 'owner')
 

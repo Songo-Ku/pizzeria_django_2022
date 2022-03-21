@@ -29,7 +29,7 @@ class Topping(models.Model):
     name = models.CharField(max_length=100)
     price = models.DecimalField(decimal_places=2, max_digits=5)
     supplier = models.CharField(max_length=100)
-    meals = models.ManyToManyField(Pizza)  # czy taka konstrukcja through ma sens ?
+    meals = models.ManyToManyField(Pizza)
     # moze jest jakas konwencja nazywania tego ?
 
     def __str__(self):

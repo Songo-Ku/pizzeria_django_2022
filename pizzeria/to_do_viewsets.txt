@@ -1,5 +1,13 @@
-praca z toppings
-sprawdzic w insomnia czy mozna stworzyc nowy topping do konkretnej restauracji i pizzy.
+1 potrzebuje odpytac pizze i sprawdzic jej skladniki taki endpoint i widok ???
 
+2 potrzebuje zrobic w koncu test na operacje order system oraz wystawic viewsety/endpointy konkretne ktore pozwola to ogarnac
 
-d4a1e7724afc10df70619332bc7df194781d3a64
+3 doprecyzowac testy
+
+3a podpiac postresa
+3b zainstalowac dockera
+
+4 dalej chce rozwinac jakies polaczenie z facebookiem
+5 jakis system platnosci podpiac
+
+6 testy objac poalczenie z facebookiem i platnosciami jakies mockowania
