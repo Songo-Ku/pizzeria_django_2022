@@ -1,13 +1,24 @@
-1 potrzebuje odpytac pizze i sprawdzic jej skladniki taki endpoint i widok ???
+1
+potrzebuje odpytac pizze i sprawdzic jej skladniki taki endpoint i widok ???
 
-2 potrzebuje zrobic w koncu test na operacje order system oraz wystawic viewsety/endpointy konkretne ktore pozwola to ogarnac
+1a
+potrzebuje te __pycache__ usunac ale nie wiem jak ??
 
-3 doprecyzowac testy
+2
+potrzebuje zrobic w koncu test na operacje order system oraz wystawic viewsety/endpointy konkretne ktore pozwola to ogarnac
 
-3a podpiac postresa
-3b zainstalowac dockera
+3
+doprecyzowac testy
 
-4 dalej chce rozwinac jakies polaczenie z facebookiem
-5 jakis system platnosci podpiac
+3a
+podpiac postresa
+3b
+zainstalowac dockera
 
-6 testy objac poalczenie z facebookiem i platnosciami jakies mockowania
+4
+dalej chce rozwinac jakies polaczenie z facebookiem
+5
+jakis system platnosci podpiac
+
+6
+testy objac poalczenie z facebookiem i platnosciami jakies mockowania
