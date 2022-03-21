@@ -45,25 +45,6 @@ class RestaurantViewSet(viewsets.ModelViewSet):
             return RestaurantUpdateSerializer
         return super().get_serializer_class()
 
-    # def create(self, request, *args, **kwargs):
-    #     data = request.data
-    #     data['owner'] = request.user
-    #     serializer = self.get_serializer(data=data)
-    #     # print('request data to: \n:', request.data)
-    #
-    #     serializer.is_valid(raise_exception=True)
-    #     # print('serializer to: \n:', serializer)
-    #     self.perform_create(serializer)
-    #     headers = self.get_success_headers(serializer.data)
-    #     return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
-    #
-    # def perform_create(self, serializer):
-    #     print(self.request.user, '\n jest w perform create')
-    #     serializer.save(owner=self.request.user)  # to musi byc w przeciwnym razie nie bedzie dobrze przekazany owner
-    #     restaurants = Restaurant.objects.all()
-    #     print('to sa restauracje po perform create', restaurants)
-
-
     def get_permissions(self):
         if self.action == 'list':
             permission_classes = []
@@ -81,9 +62,6 @@ class ToppingViewSet(viewsets.ModelViewSet):
     permission_classes = [permissions.IsAuthenticated]
 
     def create(self, request, *args, **kwargs):
-        if request.data:
-            print(request.data, '\n reuqest data')
-            print(request.data.get("vote"))
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         self.perform_create(serializer)
@@ -98,11 +76,9 @@ class ToppingViewSetCustom(viewsets.ModelViewSet):
 
     def create(self, request, *args, **kwargs):
         if request.data:
-            print(request.data, '\n reuqest data')
-            print(request.data.get("vote"))
-        if request.data:
-            print(request.data, '\n reuqest data')
-            print(request.data.get("choice"))
+            print(request.data, '\nreuqest data')
+            print(request.data.get("choice", 'nie ma choice'))
+            print(request.data.get("vote", 'nie ma vote'))
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         self.perform_create(serializer)
@@ -139,18 +115,5 @@ class PizzaViewSet(viewsets.ModelViewSet):
         return [permission() for permission in permission_classes]
 
 
-    # def get_permissions(self):
-    #     # Your logic should be all here
-    #     if self.request.method == 'GET':
-    #         self.permission_classes = [DummyPermission, ]
-    #     else:
-    #         self.permission_classes = [IsAuthenticated, ]
-    #
-    #     return super(UsersViewSet, self).get_permissions()
-#
-#     def update(self, request, *args, **kwargs):
-#         self.methods=('put',)
-#         self.permission_classes = (permissions.CustomPermissions,)
-#         return super(self.__class__, self).update(request, *args, **kwargs)
 
 

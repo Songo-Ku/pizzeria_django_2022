@@ -17,7 +17,7 @@ class RestaurantCreateSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Restaurant
-        fields = ['name', 'address', 'phone_number']
+        fields = ['name', 'address', 'phone_number', 'modified', 'created']
         read_only_fields = ('pk', 'modified', 'created')
 
     def create(self, validated_data):
@@ -28,13 +28,13 @@ class RestaurantCreateSerializer(serializers.ModelSerializer):
 class RestaurantUpdateSerializer(serializers.ModelSerializer):
 
     class Meta:
-        model = Restaurant
-        fields = ['address', 'phone_number', 'pizzas']
-        read_only_fields = ('name', 'pk', 'modified', 'created')
+        model = Restaurantgit a
+        fields = ['name', 'address', 'phone_number', 'pizzas', 'owner', 'modified', 'created']
+        read_only_fields = ('name', 'pk', 'modified', 'created', 'owner')
 
 
 class PizzaSerializer(serializers.ModelSerializer):
-    restaurant_name = serializers.ReadOnlyField(source='restaurant.name')
+    restaurant_name = serializers.ReadOnlyField(source='restaurant.name')  # to nie dziala
     modified = serializers.ReadOnlyField()
 
     class Meta:
@@ -50,7 +50,7 @@ class PizzaCreateSerializer(serializers.ModelSerializer):
 
 
 class ToppingSerializer(serializers.ModelSerializer):
-    meals_name = serializers.ReadOnlyField(source='pizza.name')
+    meals_name = serializers.ReadOnlyField(source='pizza.name')  # to nie dziala
 
     class Meta:
         model = Topping

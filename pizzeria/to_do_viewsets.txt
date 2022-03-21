@@ -1,2 +1,5 @@
 praca z toppings
 sprawdzic w insomnia czy mozna stworzyc nowy topping do konkretnej restauracji i pizzy.
+
+
+d4a1e7724afc10df70619332bc7df194781d3a64
