@@ -52,7 +52,7 @@ class Payment(models.Model):
 
 
 class OrderedProducts(models.Model):
-    # pizza_name = models.CharField(max_length=20)  # dlaczego tutaj nie moze byc ManyToManyField
+    # pizza_name = models.CharField(max_length=20)
     count = models.IntegerField(default=1)
     total = models.DecimalField(decimal_places=2, max_digits=7)  # set_total
     # price = models.DecimalField(decimal_places=2, max_digits=5)
