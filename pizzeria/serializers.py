@@ -33,13 +33,26 @@ class RestaurantUpdateSerializer(serializers.ModelSerializer):
         read_only_fields = ('name', 'pk', 'modified', 'created', 'owner')
 
 
+class ToppingSerializer(serializers.ModelSerializer):
+    meals_name = serializers.ReadOnlyField(source='pizza.name')  # to nie dziala
+
+    class Meta:
+        model = Topping
+        fields = ['pk', 'name', 'price', 'supplier', 'meals', 'meals_name']
+
+
 class PizzaSerializer(serializers.ModelSerializer):
-    restaurant_name = serializers.ReadOnlyField(source='restaurant.name')  # to nie dziala
+    restaurant_name = serializers.ReadOnlyField(source='restaurant.name')
     modified = serializers.ReadOnlyField()
+    topping_set = serializers.SlugRelatedField(many=True, slug_field='name', read_only=True)
+    # topping_set = ToppingSerializer(many=True)
 
     class Meta:
         model = Pizza
-        fields = ['pk', 'name', 'price', 'description', 'restaurant', 'restaurant_name', 'modified']
+        fields = [
+            'pk', 'name', 'price', 'description', 'restaurant', 'restaurant_name', 'modified',
+            'topping_set',
+        ]
 
 
 class PizzaCreateSerializer(serializers.ModelSerializer):
@@ -47,14 +60,6 @@ class PizzaCreateSerializer(serializers.ModelSerializer):
         model = Pizza
         fields = ['name', 'price', 'description', 'restaurant']
         read_only_fields = ('pk', 'modified', 'created')
-
-
-class ToppingSerializer(serializers.ModelSerializer):
-    meals_name = serializers.ReadOnlyField(source='pizza.name')  # to nie dziala
-
-    class Meta:
-        model = Topping
-        fields = ['pk', 'name', 'price', 'supplier', 'meals', 'meals_name']
 
 
 

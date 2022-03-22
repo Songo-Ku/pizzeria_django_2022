@@ -1,8 +1,8 @@
 1
 potrzebuje odpytac pizze i sprawdzic jej skladniki taki endpoint i widok ???
 
-1a
-potrzebuje te __pycache__ usunac ale nie wiem jak ??
+
+1a jak mam testviewsets i linijke 184 jak odpytac cls.topping1 meals z many to many pola gdzie dodalem 2 obiekty typu factorie
 
 2
 potrzebuje zrobic w koncu test na operacje order system oraz wystawic viewsety/endpointy konkretne ktore pozwola to ogarnac
@@ -12,13 +12,19 @@ doprecyzowac testy
 
 3a
 podpiac postresa
+django postgres fields tylko jesli jest postrgres
 3b
 zainstalowac dockera
 
 4
 dalej chce rozwinac jakies polaczenie z facebookiem
+ang4life django social share
+
 5
-jakis system platnosci podpiac
+jakis system platnosci podpiac integracja z przelewami 24
+payu
+paypal
+
 
 6
 testy objac poalczenie z facebookiem i platnosciami jakies mockowania

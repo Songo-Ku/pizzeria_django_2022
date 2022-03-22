@@ -24,6 +24,9 @@ class Pizza(models.Model):
     def __str__(self):
         return f' {self.name} from {self.restaurant.name}'
 
+    def show_toppings(self):
+        print(self.topping_set.all())
+
 
 class Topping(models.Model):
     name = models.CharField(max_length=100)

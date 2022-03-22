@@ -1,9 +1,12 @@
 from random import randint
 
+from django.db.models import Max
 from django.utils.html import escape
 from django.contrib.auth.models import User
 from django.urls import path, include, reverse
 # from faker import factory
+from faker import Faker
+from faker.providers import DynamicProvider
 import factory
 
 from pizzeria.models import Pizza, Restaurant, Topping
@@ -14,6 +17,12 @@ from rest_framework import status
 from rest_framework import routers
 
 from pizzeria.factories import UserFactory, RestaurantFactory, PizzaFactory, ToppingFactory
+
+
+name_topping_provider = DynamicProvider(
+     provider_name="name_topping",
+     elements=["ser", "szynka", "pieczarki", "ananas", "boczek"],
+)
 
 
 class RestaurantViewSetTestCase(APITestCase):
@@ -56,7 +65,8 @@ class RestaurantViewSetTestCase(APITestCase):
         self.assertEquals(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_post_correct_input_restaurant_saved_to_db(self):
-        response = self.post_correct_input_restaurant()
+        self.post_correct_input_restaurant()
+        # max_id = Restaurant.objects.aggregate(Max('id'))
         self.assertEquals(Restaurant.objects.count(), self.amount_restaurants + 1)  # czy tak powinno się robić czy na sztywno?
         self.assertEqual(Restaurant.objects.get(name=self.restaurant_name).name, self.restaurant_name)
 
@@ -165,55 +175,56 @@ class ToppingViewSetTestCase(APITestCase):
 
     @classmethod
     def setUpClass(cls):
-        cls.pizza_list_url = reverse("topping-list")
+        cls.topping_list_url = reverse("topping-list")
         cls.user1 = UserFactory()
         cls.restaurant1 = RestaurantFactory(owner=cls.user1)
         cls.pizza1 = PizzaFactory(restaurant=cls.restaurant1)
         cls.pizza2 = PizzaFactory(restaurant=cls.restaurant1)
 
-        print('cls pizza1: \n', cls.pizza1, '\n')
-        # cls.topping1 = ToppingFactory()
-        cls.topping1 = ToppingFactory.create(meals=[cls.pizza1, cls.pizza2])
+        cls.topping1 = ToppingFactory.create(meals=[cls.pizza1.id, cls.pizza2.id])
         cls.topping2 = ToppingFactory.create(meals=[cls.pizza2])
-
-        # https://factoryboy.readthedocs.io/en/stable/recipes.html dokuemntacja
-
-        print('\n to topping1:       ', cls.topping1)
-        print('\n to meals z topping1:       ', cls.topping1.meals)
-
-        print('to jest UserFactory \n', cls.user1)
+        cls.topping_faker1 = Faker()
+        Faker.seed(321)
+        cls.topping_faker1.add_provider(name_topping_provider)  # customowy faker z nazwa skladnika
         super().setUpClass()
 
     def setUp(self):
         self.client.force_authenticate(user=self.user1)
-        self.topping_name = "capri"
-        self.topping_price = randint(20, 45)
         # self.description = factory.Sequence(lambda n: 'losowy opis nr %d' % n)
-        self.topping_supplier = ' to opis topping '
         self.amount_toppings = Topping.objects.count()
-        print('amount pizza: ', self.amount_toppings)
+        # self.max_id = Restaurant.objects.aggregate(Max('id'))
+        self.max_id = Restaurant.objects.filter().aggregate(max_id=Max('pk'))
+        self.maxid_2 = Restaurant.objects.aggregate(Max('pk')).get('pk__max')
+        print(' maxid2222  \n', self.maxid_2)
+
+        self.max_id = self.max_id.get('max_id')
+        self.amount_restaurant = Restaurant.objects.count()
+        print(self.amount_restaurant, 'to jest amount restaurant z count \n')
+        print(self.max_id, ' to jest max id \n')
+        self.topping1.refresh_from_db()
+        print('\n to meals z topping1:       ', self.topping1.meals)
 
     def test_for_not_existed_topping(self):
         response = self.client.get(self.topping_detail_uri.format(self.amount_toppings + 1))
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
-    #
-    # def post_correct_input_pizza(self):
-    #     valid_pizza = {
-    #         "name": self.pizza_name,
-    #         "price": self.pizza_price,
-    #         "description": self.pizza_description,
-    #         "restaurant": self.restaurant3.id,
-    #     }
-    #     return self.client.post(self.pizza_list_url, data=valid_pizza)
-    #
-    # def post_incorrect_input_pizza(self):
-    #     invalid_pizza = {"name": "", "price": "dwadaw", "description": 'dwdaawd',}
-    #     return self.client.post(self.pizza_list_url, data=invalid_pizza)
-    #
-    # def test_incorrect_post_pizza_status_400(self):
-    #     response = self.post_incorrect_input_pizza()
-    #     self.assertEquals(response.status_code, status.HTTP_400_BAD_REQUEST)
-    #
+
+    def post_correct_input_topping(self):
+        valid_topping = {
+            "name": self.topping_faker1.name_topping(),
+            "price": self.randint(20, 45),
+            "supplier": self.topping_faker1.text(),
+            "meals": [self.pizza1.id, self.pizza2.id],
+        }
+        return self.client.post(self.topping_list_url, data=valid_topping)
+
+    def post_incorrect_input_topping(self):
+        invalid_topping = {"name": "", "price": "dwadaw", "supplier": 'dwdaawd',}
+        return self.client.post(self.topping_list_url, data=invalid_topping)
+
+    def test_incorrect_post_pizza_status_400(self):
+        response = self.post_incorrect_input_topping()
+        self.assertEquals(response.status_code, status.HTTP_400_BAD_REQUEST)
+
     # def test_post_incorrect_restaurant_not_saved_to_db(self):
     #     response = self.post_incorrect_input_pizza()
     #     self.assertEquals(Pizza.objects.count(), self.amount_pizzas)
@@ -247,15 +258,21 @@ class ToppingViewSetTestCase(APITestCase):
     #
     #
 
+class TiestooooViewSetTestCase(APITestCase):
+    topping_detail_uri = '/api/xxxx/{}/'
 
+    @classmethod
+    def setUpClass(cls):
+        cls.maxid_2 = Restaurant.objects.all().aggregate(Max('pk')).get('pk__max')
+        print(cls.maxid_2, ' max id 2 dla iestooottotototototo \n')
+        cls.objlast = Restaurant.objects.last()
+        print(cls.objlast.id, ' obj last')
+        cls.restaurant_list_url = reverse("restaurant-list")
+        super().setUpClass()
 
-
-
-
-
-
-
-
+    def test_get_list_restaurants(self):
+        response = self.client.get(self.restaurant_list_url)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
 
 
 

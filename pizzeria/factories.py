@@ -8,7 +8,6 @@ TYPE_OF_PIZZA = ['margerita', 'hawai', 'capriciosa', 'kebab', 'fivecheese']
 TOPPING = ['cheese', 'pineaple', 'cham', 'salami', 'tomato souce']
 
 
-
 class UserFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = User
@@ -54,10 +53,6 @@ class ToppingFactory(factory.django.DjangoModelFactory):
             # A list of groups were passed in, use them
             for meal in extracted:
                 self.meals.add(meal)
-
-
-
-
 
 
 # class ToppingPizzaFactory(factory.django.DjangoModelFactory):

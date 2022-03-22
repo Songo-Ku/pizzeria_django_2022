@@ -103,8 +103,8 @@ class PizzaViewSet(viewsets.ModelViewSet):
     def get_serializer_class(self):
         if self.action == 'create':
             return PizzaCreateSerializer
-        # elif self.action == 'update':
-        #     return PizzaUpdateSerializer
+        elif self.action == 'retrieve':
+            self.get_object().show_toppings()
         return super().get_serializer_class()
 
     def get_permissions(self):
