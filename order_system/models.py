@@ -32,15 +32,13 @@ class Order(models.Model):
         else:
             return 'Not added yet - Unknown'
 
-    def set_total(self, total):
-        self.total = total
-        # list_products = self.orderedproducts_set.all()
-        # total_calculated = 0
-        # for product in list_products:
-        #     total_calculated += product.total
+    def set_total(self):
+        list_products = self.ordered_products.all()
+        total_calculated = 0
+        for product in list_products:
+            total_calculated += product.total * product.count
         # # tutaj  zwrocic odpowiednia kwote za kazdym razem i napisac
-        # self.total = total_calculated
-        # wyglada ze to dziala
+        self.total += total_calculated
 
 
 class Payment(models.Model):
@@ -65,7 +63,7 @@ class OrderedProducts(models.Model):
     count = models.IntegerField(default=1)
     total = models.DecimalField(decimal_places=2, max_digits=7)  # set_total
     order = models.ForeignKey(Order, models.CASCADE, related_name='ordered_products')
-    product = models.ForeignKey(Pizza, related_name='pizza_products', on_delete=models.CASCADE)
+    product = models.ForeignKey(Pizza, related_name='ordered_products', on_delete=models.CASCADE)
 
     def __str__(self):
         # return f'zamowiona pizza to {self.pizza_name} w ilosc {self.amount} za {self.amount * self.price}'
