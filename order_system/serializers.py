@@ -53,15 +53,16 @@ class OrderedProductsSerializer(serializers.ModelSerializer):
 
 class OrderedProductsCreateSerializer(serializers.ModelSerializer):
     order_name = serializers.ReadOnlyField(source='order.get_restaurant_name')
-    product = serializers.PrimaryKeyRelatedField(queryset=Pizza.objects.all())
+    # product = serializers.PrimaryKeyRelatedField(queryset=Pizza.objects.all())
 
     class Meta:
         model = OrderedProducts
         fields = ['pk', 'count', 'order', 'order_name', 'product']
 
     def create(self, validated_data):
+        print(validated_data.get("product"))
         # recalcualted_price = sum([pizza.price for pizza in validated_data['product']])
-        # validated_data['total'] = recalcualted_price
+        validated_data['total'] = 0
         return super(OrderedProductsSerializer, self).create(validated_data)
 
 

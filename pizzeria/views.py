@@ -1,23 +1,20 @@
 from django.shortcuts import render
+from django.contrib.auth.models import User
+
 # from .permissions import IsOwnerOrReadOnly
 from rest_framework.decorators import api_view
+from rest_framework.settings import api_settings
 from rest_framework import status
 from rest_framework.response import Response
+from rest_framework import viewsets
+from rest_framework import permissions
 from rest_framework.reverse import reverse
 from rest_framework import mixins, generics, renderers
+
 from .models import Restaurant, Topping, Pizza
 from .serializers import \
     RestaurantSerializer, ToppingSerializer, PizzaSerializer, RestaurantUpdateSerializer, RestaurantCreateSerializer, \
-    PizzaCreateSerializer
-from rest_framework import viewsets
-from rest_framework import permissions
-
-# create mixins from modelviewset
-from rest_framework.settings import api_settings
-
-
-
-from django.contrib.auth.models import User
+    PizzaCreateSerializer, ToppingCreateUpdateSerializer, ToppingListDetailSerializer, PizzaDetailSerializer
 
 
 class RestaurantViewSet(viewsets.ModelViewSet):
@@ -63,10 +60,18 @@ class ToppingViewSet(viewsets.ModelViewSet):
 
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
+        # print('to jest serializer w viewset create\n', serializer)
         serializer.is_valid(raise_exception=True)
         self.perform_create(serializer)
         headers = self.get_success_headers(serializer.data)
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+
+    def get_serializer_class(self):
+        if self.action == 'create' or self.action == 'update':
+            return ToppingCreateUpdateSerializer
+        elif self.action == 'list' or self.action == 'retrieve':
+            return ToppingListDetailSerializer
+        return super().get_serializer_class()
 
 
 class ToppingViewSetCustom(viewsets.ModelViewSet):
@@ -104,7 +109,10 @@ class PizzaViewSet(viewsets.ModelViewSet):
         if self.action == 'create':
             return PizzaCreateSerializer
         elif self.action == 'retrieve':
-            self.get_object().show_toppings()
+            return PizzaDetailSerializer
+        # elif self.action == 'retrieve':
+        #     print('request get retrieve na danych obiekt ')
+        #     self.get_object().show_toppings()
         return super().get_serializer_class()
 
     def get_permissions(self):

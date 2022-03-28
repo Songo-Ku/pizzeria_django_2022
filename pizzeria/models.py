@@ -25,7 +25,13 @@ class Pizza(models.Model):
         return f' {self.name} from {self.restaurant.name}'
 
     def show_toppings(self):
-        print(self.topping_set.all())
+        return self.topping_set.all()
+
+    def show_toppings_names(self):
+        return [topping.name for topping in self.topping_set.all()]
+
+    def show_toppings_prices(self):
+        return [topping.price for topping in self.topping_set.all()]
 
 
 class Topping(models.Model):
@@ -33,10 +39,11 @@ class Topping(models.Model):
     price = models.DecimalField(decimal_places=2, max_digits=5)
     supplier = models.CharField(max_length=100)
     meals = models.ManyToManyField(Pizza)
-    # moze jest jakas konwencja nazywania tego ?
 
     def __str__(self):
-        return f'{self.name}'
+        return f'{self.name} w pizzach: {self.meals.all()}'
+
+
 
 
 # class PizzaTopping(models.Model):

@@ -1,6 +1,7 @@
 from django.contrib import admin
 from django.urls import path, include
 from pizzeria.views import RestaurantViewSet, ToppingViewSet, PizzaViewSet, ToppingViewSetCustom
+#, ToppingViewSetCustom
 from order_system.views import OrderViewSet, PaymentViewSet, OrderedProductsViewSet
 from rest_framework import routers
 
@@ -10,7 +11,7 @@ router = routers.DefaultRouter()
 # pizzeria app
 router.register(r'restaurants', RestaurantViewSet, basename='restaurant')
 router.register(r'toppings', ToppingViewSet, basename='topping')
-router.register(r'newtoppings', ToppingViewSetCustom, basename='topping')
+router.register(r'newtoppings', ToppingViewSetCustom, basename='newtopping')
 router.register(r'pizzas', PizzaViewSet, basename='pizza')
 # order system app
 router.register(r'orders', OrderViewSet, basename='orders')

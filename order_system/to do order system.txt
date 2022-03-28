@@ -1,0 +1,4 @@
+dodanie produktow do zamowienia
+automatyczne podsumowanie ceny koszyka
+lista produktow w koszyku
+widok pokazujacy ile ma dana pizza skladnikow i jakich, ceny

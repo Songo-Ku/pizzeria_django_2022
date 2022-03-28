@@ -1,8 +1,8 @@
 import factory
 from . import models
 from django.contrib.auth.models import User
-from random import randint, choice
-
+from random import randint
+from random import choice as random_choice
 
 TYPE_OF_PIZZA = ['margerita', 'hawai', 'capriciosa', 'kebab', 'fivecheese']
 TOPPING = ['cheese', 'pineaple', 'cham', 'salami', 'tomato souce']
@@ -29,7 +29,7 @@ class PizzaFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = models.Pizza
 
-    name = choice(TYPE_OF_PIZZA)  # + str(factory.Sequence(lambda n: ' %d' % n))
+    name = random_choice(TYPE_OF_PIZZA)
     price = randint(20, 45)
     description = factory.Sequence(lambda n: 'losowy opis nr %d' % n)
     restaurant = factory.SubFactory(RestaurantFactory)
@@ -39,7 +39,7 @@ class ToppingFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = models.Topping
 
-    name = choice(TOPPING) + str(factory.Sequence(lambda n: 'skladnik o nr. %d' % n))
+    name = str(random_choice(TOPPING))
     price = randint(20, 45)
     supplier = factory.Sequence(lambda n: 'random supplier id %d' % n)
 
