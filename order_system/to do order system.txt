@@ -3,7 +3,16 @@ automatyczne podsumowanie ceny koszyka
 lista produktow w koszyku
 widok pokazujacy ile ma dana pizza skladnikow i jakich, ceny
 
+github cli
+ubuntu commands bash terminal
 
-
+if __name__ == '__main__':
+    then wywoluj kod zeby robil robote
 
 PIPenv
+
+logi bledy cos zaisywac
+
+pisac do pliku
+try except blad
+open file append i trsc bledu timestamp

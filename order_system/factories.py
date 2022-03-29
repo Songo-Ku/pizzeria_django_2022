@@ -11,6 +11,16 @@ TYPE_OF_PAYMENT = [
 ]
 
 
+class ContactUserFactory(factory.django.DjangoModelFactory):
+    class Meta:
+        model = models.ContactUser
+
+    address_delivery = 'mordor 2'
+    name = 'Janusz'
+    surname = 'Kowalski'
+    phone = '+48516000389'
+
+
 class OrderFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = models.Order

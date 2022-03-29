@@ -43,6 +43,8 @@ INSTALLED_APPS = [
     'allauth.account',
     'allauth.socialaccount',
 
+    'phonenumber_field',
+
     # 'rest_auth',
     # 'rest_auth.registration',
 

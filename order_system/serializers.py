@@ -1,9 +1,15 @@
 from pizzeria.models import Restaurant, Pizza, Topping
 from pizzeria.serializers import PizzaSerializer
-from .models import Order, OrderedProducts, Payment
+from .models import Order, OrderedProducts, Payment, ContactUser
 from django.contrib.auth.models import User, Group
 from rest_framework import serializers
 from django.utils import timezone
+
+
+class ContactUserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ContactUser
+        fields = ['id', 'address_delivery', 'name', 'surname', 'phone']
 
 
 class OrderSerializer(serializers.ModelSerializer):
@@ -16,12 +22,12 @@ class OrderSerializer(serializers.ModelSerializer):
     ordered_products = serializers.HyperlinkedRelatedField(
         many=True,
         read_only=True,
-        view_name='order-products-detail'
+        view_name='order-product-detail'
     )
 
     class Meta:
         model = Order
-        fields = ['pk', 'total', 'id_restaurant', 'payment_status', 'ordered_products']  # , 'ordered_products_names'
+        fields = ['pk', 'id_restaurant', 'payment_status', 'contact_data', 'ordered_products']  # , 'ordered_products_names' , #ordered_products
 
 
 class PaymentSerializer(serializers.ModelSerializer):
@@ -53,18 +59,16 @@ class OrderedProductsSerializer(serializers.ModelSerializer):
 
 class OrderedProductsCreateSerializer(serializers.ModelSerializer):
     order_name = serializers.ReadOnlyField(source='order.get_restaurant_name')
-    # product = serializers.PrimaryKeyRelatedField(queryset=Pizza.objects.all())
+    product = serializers.PrimaryKeyRelatedField(queryset=Pizza.objects.all())
 
     class Meta:
         model = OrderedProducts
-        fields = ['pk', 'count', 'order', 'order_name', 'product']
+        fields = ['pk', 'count', 'order', 'order_name', 'product', 'pizza_name']
 
     def create(self, validated_data):
-        print(validated_data.get("product"))
-        # recalcualted_price = sum([pizza.price for pizza in validated_data['product']])
+        print('to jest validated data from create productsserializers \n', validated_data)
         validated_data['total'] = 0
-        return super(OrderedProductsSerializer, self).create(validated_data)
-
+        return super(OrderedProductsCreateSerializer, self).create(validated_data)
 
 
 

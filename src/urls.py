@@ -2,7 +2,8 @@ from django.contrib import admin
 from django.urls import path, include
 from pizzeria.views import RestaurantViewSet, ToppingViewSet, PizzaViewSet, ToppingViewSetCustom
 #, ToppingViewSetCustom
-from order_system.views import OrderViewSet, PaymentViewSet, OrderedProductsViewSet
+from order_system.views import OrderViewSet, PaymentViewSet, OrderedProductsViewSet, \
+    ContactUserViewSet
 from rest_framework import routers
 
 # ---------------------------------------------------------
@@ -14,9 +15,11 @@ router.register(r'toppings', ToppingViewSet, basename='topping')
 router.register(r'newtoppings', ToppingViewSetCustom, basename='newtopping')
 router.register(r'pizzas', PizzaViewSet, basename='pizza')
 # order system app
-router.register(r'orders', OrderViewSet, basename='orders')
-router.register(r'payments', PaymentViewSet, basename='payments')
-router.register(r'order-products', OrderedProductsViewSet, basename='order-products')
+router.register(r'contact-user', ContactUserViewSet, basename='contact-user')
+router.register(r'orders', OrderViewSet, basename='order')
+router.register(r'payments', PaymentViewSet, basename='payment')
+router.register(r'order-products', OrderedProductsViewSet, basename='order-product')
+
 # ---------------------------------------------------------
 
 urlpatterns = [
