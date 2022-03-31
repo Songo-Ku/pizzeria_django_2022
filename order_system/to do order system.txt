@@ -1,3 +1,6 @@
+https://stackoverflow.com/questions/62724145/choosing-from-a-list-of-names-using-factory-boy-integrated-with-faker
+dodac ten random z tego linku zeby naprawic factorie z losowaniem
+
 dodanie produktow do zamowienia
 automatyczne podsumowanie ceny koszyka
 lista produktow w koszyku
@@ -16,3 +19,10 @@ logi bledy cos zaisywac
 pisac do pliku
 try except blad
 open file append i trsc bledu timestamp
+
+
+
+implementacja dokumentacji np jak tutaj:
+https://books.agiliq.com/projects/django-api-polls-tutorial/en/latest/swagger.html
+lub coreapi
+https://books.agiliq.com/projects/django-api-polls-tutorial/en/latest/swagger.html#using-coreapi-for-documentation
