@@ -17,6 +17,7 @@ import factory
 # import phonenumber_field.phonenumber
 # phonenumber_field.phonenumber()
 
+from phonenumber_field import phonenumber
 from phonenumbers import PhoneNumber
 from random import randint
 phonen = PhoneNumber(country_code=randint(1, 999), national_number=randint(10000000, 9999999990))
@@ -83,7 +84,7 @@ class ContactUserViewSetTestCase(APITestCase):
         )
         user_contact_from_obj = ContactUser.objects.get(id=contact_user_.id)
 
-        phone_faker_factory = factory.Faker('phone_number')
+        phone_faker_factory = phonenumber.PhoneNumber()
         print('faker phone factory: \n', phone_faker_factory)
         print('user conact telephone,\n', user_contact_from_obj.phone)
         response = self.client.get(self.order_detail_uri.format(contact_user_.id))

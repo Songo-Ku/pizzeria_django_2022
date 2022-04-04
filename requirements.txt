@@ -13,6 +13,7 @@ defusedxml==0.7.1
 Django==3.2.6
 django-allauth==0.44.0
 django-phonenumber-field==6.1.0
+django-phonenumbers==1.0.1
 django-rest-allauth==1.1
 django-rest-auth==0.9.5
 django-templated-mail==1.1.1
@@ -35,6 +36,7 @@ numpy==1.21.5
 oauthlib==3.1.1
 parso==0.8.3
 pexpect==4.8.0
+phonenumbers==8.12.46
 pickleshare==0.7.5
 prompt-toolkit==3.0.24
 ptyprocess==0.7.0

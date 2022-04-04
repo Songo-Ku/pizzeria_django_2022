@@ -30,7 +30,8 @@ class ContactUserFactory(factory.django.DjangoModelFactory):
         model = models.ContactUser
 
     address_delivery = 'mordor 2'
-    name = factory.fuzzy.FuzzyChoice(['Magda', 'Marek', 'Arek', 'Janusz', 'Marta'])
+    # do wyboru gdzie moga byc powtorzone = factory.fuzzy.FuzzyChoice(['Magda', 'Marek', 'Arek', 'Janusz', 'Marta'])
+    name = factory.Sequence(lambda n: 'user' + n)
     surname = 'Kowalski'
     phone = factory.Faker('phone_number')
 
