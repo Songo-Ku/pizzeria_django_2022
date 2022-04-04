@@ -1,1 +1,0 @@
-EMPTY_ITEM_ERROR = ['']

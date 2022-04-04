@@ -1,5 +1,4 @@
 from django.utils.html import escape
-from pizzeria.forms import EMPTY_ITEM_ERROR
 
 from django.contrib.auth.models import User
 from django.urls import reverse

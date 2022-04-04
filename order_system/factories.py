@@ -1,14 +1,28 @@
 import factory
+from factory import fuzzy  # this line is required from some technical reasons
+# from phonenumbers import PhoneNumber
+# import phonenumber_field.phonenumber
+
 from . import models
 from django.contrib.auth.models import User
 from random import choice as random_choice
 from pizzeria.factories import UserFactory, PizzaFactory
+
+from phonenumbers import PhoneNumber
+from random import randint
+
+
+# phonen.national_number
 
 TYPE_OF_PAYMENT = [
     ('not accepted', 'not accepted'),
     ('pending', 'pending'),
     ('accepted', 'accepted')
 ]
+# import faker
+# faker.Faker.seed(0)
+# for _ in range(5):
+#     faker.country_calling_code()
 
 
 class ContactUserFactory(factory.django.DjangoModelFactory):
@@ -16,9 +30,9 @@ class ContactUserFactory(factory.django.DjangoModelFactory):
         model = models.ContactUser
 
     address_delivery = 'mordor 2'
-    name = 'Janusz'
+    name = factory.fuzzy.FuzzyChoice(['Magda', 'Marek', 'Arek', 'Janusz', 'Marta'])
     surname = 'Kowalski'
-    phone = '+48516000389'
+    phone = factory.Faker('phone_number')
 
 
 class OrderFactory(factory.django.DjangoModelFactory):

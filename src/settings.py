@@ -51,7 +51,6 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework.authtoken',
 
-
     'order_system',
     'pizzeria',
     # 'auth_custom',

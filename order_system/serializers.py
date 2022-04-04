@@ -27,7 +27,7 @@ class OrderSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Order
-        fields = ['pk', 'id_restaurant', 'payment_status', 'contact_data', 'ordered_products']  # , 'ordered_products_names' , #ordered_products
+        fields = ['pk', 'id_restaurant', 'payment_status', 'contact_data', 'ordered_products']   # , 'ordered_products_names' , #ordered_products
 
 
 class PaymentSerializer(serializers.ModelSerializer):

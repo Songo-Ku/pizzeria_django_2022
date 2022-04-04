@@ -1,4 +1,5 @@
 import factory
+from factory import fuzzy  # this line is required from some technical reasons
 from . import models
 from django.contrib.auth.models import User
 from random import randint
@@ -13,6 +14,7 @@ class UserFactory(factory.django.DjangoModelFactory):
         model = User
 
     username = factory.Sequence(lambda n: 'user%d' % n)
+    # username = factory.fuzzy.FuzzyChoice(['Magda', 'Marek', 'Arek', 'Janusz', 'Marta'])
 
 
 class RestaurantFactory(factory.django.DjangoModelFactory):

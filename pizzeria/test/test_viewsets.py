@@ -58,7 +58,7 @@ class RestaurantViewSetTestCase(APITestCase):
 
     def test_post_correct_input_restaurant_saved_to_db(self):
         self.post_correct_input_restaurant()
-        self.assertEquals(Restaurant.objects.count(), self.amount_restaurants + 1)  # czy tak powinno się robić czy na sztywno?
+        self.assertEquals(Restaurant.objects.count(), self.amount_restaurants + 1)
         self.assertEqual(Restaurant.objects.get(name=self.restaurant_name).name, self.restaurant_name)
 
     def test_post_incorrect_input_restaurant_saved_to_db(self):
@@ -71,7 +71,6 @@ class RestaurantViewSetTestCase(APITestCase):
         self.assertEqual(Restaurant.objects.count(), self.amount_restaurants)
         self.assertEqual(Restaurant.objects.get(id=self.restaurant1.id).name, self.restaurant1.name)
 
-    # tdd assumptions
     def test_get_restaurant_detail_status(self):
         restaurant_ = RestaurantFactory(owner=self.user1)
         response = self.client.get(self.restaurant_detail_uri.format(restaurant_.id))

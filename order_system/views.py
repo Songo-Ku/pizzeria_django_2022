@@ -54,7 +54,5 @@ class OrderedProductsViewSet(viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         serializer.save()
-        print('serializer.data to: \n:', serializer.data)
-        print('ten serializer bedzie save-wowany \n', serializer.data)
-
+        print('ten serializer został zasave-wowany \n', serializer.data)
 

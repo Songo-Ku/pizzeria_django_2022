@@ -18,7 +18,7 @@ class RestaurantModelTestCase(TestCase):
     def setUp(self):
         """Define the test client and other test variables."""
         self.user1 = UserFactory()
-        print(self.user1)
+        # print(self.user1)
         print(self.user1.username)
         self.old_count_restaurant = Restaurant.objects.count()
         self.restaurant1 = RestaurantFactory(owner=self.user1)

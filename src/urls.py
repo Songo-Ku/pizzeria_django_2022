@@ -15,7 +15,7 @@ router.register(r'toppings', ToppingViewSet, basename='topping')
 router.register(r'newtoppings', ToppingViewSetCustom, basename='newtopping')
 router.register(r'pizzas', PizzaViewSet, basename='pizza')
 # order system app
-router.register(r'contact-user', ContactUserViewSet, basename='contact-user')
+router.register(r'contact-users', ContactUserViewSet, basename='contact-user')
 router.register(r'orders', OrderViewSet, basename='order')
 router.register(r'payments', PaymentViewSet, basename='payment')
 router.register(r'order-products', OrderedProductsViewSet, basename='order-product')

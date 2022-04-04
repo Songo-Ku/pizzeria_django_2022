@@ -13,6 +13,16 @@ from order_system.factories import OrderFactory, PaymentFactory, OrderedProducts
 from pizzeria.factories import UserFactory, RestaurantFactory
 
 
+import factory
+# import phonenumber_field.phonenumber
+# phonenumber_field.phonenumber()
+
+from phonenumbers import PhoneNumber
+from random import randint
+phonen = PhoneNumber(country_code=randint(1, 999), national_number=randint(10000000, 9999999990))
+phonen.national_number
+
+
 class ContactUserViewSetTestCase(APITestCase):
     order_detail_uri = '/api/contact-users/{}/'
 
@@ -66,11 +76,16 @@ class ContactUserViewSetTestCase(APITestCase):
 
     def test_get_contact_user_detail_status(self):
         contact_user_ = ContactUserFactory(
-            address_delivery='mordororu 33',
-            name='Januszek',
-            surname='Kowalsky',
-            phone='+48516000333',
+            # address_delivery='mordororu 33',
+            # name='Januszek',
+            # surname='Kowalsky',
+            # phone='+48516000333',
         )
+        user_contact_from_obj = ContactUser.objects.get(id=contact_user_.id)
+
+        phone_faker_factory = factory.Faker('phone_number')
+        print('faker phone factory: \n', phone_faker_factory)
+        print('user conact telephone,\n', user_contact_from_obj.phone)
         response = self.client.get(self.order_detail_uri.format(contact_user_.id))
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data.get('id'), contact_user_.id)
