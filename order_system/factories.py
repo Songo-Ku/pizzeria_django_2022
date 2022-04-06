@@ -3,26 +3,36 @@ from factory import fuzzy  # this line is required from some technical reasons
 # from phonenumbers import PhoneNumber
 # import phonenumber_field.phonenumber
 
+
+import faker
 from . import models
 from django.contrib.auth.models import User
 from random import choice as random_choice
 from pizzeria.factories import UserFactory, PizzaFactory
+from phonenumber_field.modelfields import PhoneNumberField
+from faker import Faker
 
 from phonenumbers import PhoneNumber
 from random import randint
 
 
-# phonen.national_number
+from phonenumber_field.phonenumber import PhoneNumber
+
 
 TYPE_OF_PAYMENT = [
     ('not accepted', 'not accepted'),
     ('pending', 'pending'),
     ('accepted', 'accepted')
 ]
-# import faker
-# faker.Faker.seed(0)
-# for _ in range(5):
-#     faker.country_calling_code()
+
+
+def fake_phone_number(fake: Faker) -> str:
+    return f'+48{fake.msisdn()[4:]}'
+
+
+def generate_phone_number():
+    fake = Faker()
+    return fake_phone_number(fake)
 
 
 class ContactUserFactory(factory.django.DjangoModelFactory):
@@ -30,10 +40,15 @@ class ContactUserFactory(factory.django.DjangoModelFactory):
         model = models.ContactUser
 
     address_delivery = 'mordor 2'
-    # do wyboru gdzie moga byc powtorzone = factory.fuzzy.FuzzyChoice(['Magda', 'Marek', 'Arek', 'Janusz', 'Marta'])
-    name = factory.Sequence(lambda n: 'user' + n)
+    name = factory.Sequence(lambda n: 'user' + str(n))
     surname = 'Kowalski'
-    phone = factory.Faker('phone_number')
+
+    @factory.lazy_attribute
+    def phone(self):
+        # print('generator\n', generate_phone_number(), '\n')
+        phone_n = PhoneNumber.from_string(phone_number=generate_phone_number(), region='PL').as_e164
+        # print('phone_n\n', phone_n, '\n')
+        return generate_phone_number()
 
 
 class OrderFactory(factory.django.DjangoModelFactory):
@@ -62,3 +77,7 @@ class OrderedProductsFactory(factory.django.DjangoModelFactory):
     total = random_choice([30, 50, 70, 100])
     order = factory.SubFactory(OrderFactory)
     product = factory.SubFactory(PizzaFactory)
+
+
+# alt_traffic_source = factory.fuzzy.FuzzyChoice(['XYZ', 'ABC', '123', '456'])
+# https://stackoverflow.com/questions/62724145/choosing-from-a-list-of-names-using-factory-boy-integrated-with-faker

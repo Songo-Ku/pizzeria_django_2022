@@ -24,3 +24,14 @@ implementacja dokumentacji np jak tutaj:
 https://books.agiliq.com/projects/django-api-polls-tutorial/en/latest/swagger.html
 lub coreapi
 https://books.agiliq.com/projects/django-api-polls-tutorial/en/latest/swagger.html#using-coreapi-for-documentation
+
+pytania:
+ContactUserViewSet superowanie na bazie tego pokazac
+np. jak zrobic zeby metoda zadzialala tak jak w oryginale, jak zeby weryfikowac cos przed albo po
+
+mam problem z testami nr telefonu, ogolnie z tym zeby to zaimplementowac i zrobic factorie pod zaimplementowany kod
+dlaczego test pomijaja walidator w bazie przy tworzeniu, a w post jak wysylam bezposrednio dany numer to nie dziala?
+
+id_restaurant  problem z facotira ze jak robie testy to bede korzystal w ficzerach ze metody beda np zwracaly nazwe danej restauracji
+co wtedy jesli np. nie bedzie danego numeru >???
+czy na sztywno dac po prostu 1 i zawsze tworzyc pizzerie przyjmujac 1 w setupclass

@@ -6,6 +6,12 @@ from rest_framework import serializers
 from django.utils import timezone
 
 
+class ContactUserCreateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ContactUser
+        fields = ['address_delivery', 'name', 'surname', 'phone']
+
+
 class ContactUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = ContactUser
