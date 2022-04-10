@@ -168,7 +168,7 @@ class ToppingViewSetTestCase(APITestCase):
         cls.pizza2 = PizzaFactory(restaurant=cls.restaurant1)
         cls.pizza3 = PizzaFactory(restaurant=cls.restaurant1)
         cls.topping1 = ToppingFactory.create(meals=(cls.pizza1.id, cls.pizza2.id))
-        cls.topping2 = ToppingFactory.create(meals=[cls.pizza3])
+        cls.topping2 = ToppingFactory.create(meals=[cls.pizza3.id])
         cls.topping3 = ToppingFactory()
         super().setUpClass()
 
@@ -182,8 +182,8 @@ class ToppingViewSetTestCase(APITestCase):
 
     def post_correct_input_topping(self):
         valid_topping = {
-            "name": self.topping3.name,
-            "price": self.topping3.price,
+            "name": 'skladnik testowy',
+            "price": 50,
             "supplier": "to jest supplier in test",
             "meals": [],
         }
@@ -207,8 +207,8 @@ class ToppingViewSetTestCase(APITestCase):
 
     def test_post_correct_topping_with_many_meals(self):
         valid_topping_with_meals = {
-            "name": self.topping3.name,
-            "price": self.topping3.price,
+            "name": 'topping test pizzas x3',
+            "price": 88,
             "supplier": "to jest supplier in test",
             "meals": [self.pizza1.id, self.pizza2.id, self.pizza3.id],
         }
@@ -220,7 +220,7 @@ class ToppingViewSetTestCase(APITestCase):
     def test_post_correct_topping_saved_to_db(self):
         response = self.post_correct_input_topping()
         self.assertEquals(Topping.objects.count(), self.max_id_topping + 1)
-        self.assertEqual(Topping.objects.get(id=self.max_id_topping + 1).name, self.topping3.name)
+        self.assertEqual(Topping.objects.get(id=self.max_id_topping + 1).name, 'skladnik testowy')
 
     def test_get_list_toppings_status_200(self):
         response = self.client.get(self.topping_list_url)

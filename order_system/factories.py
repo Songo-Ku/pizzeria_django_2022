@@ -1,21 +1,14 @@
 import factory
 from factory import fuzzy  # this line is required from some technical reasons
-# from phonenumbers import PhoneNumber
-# import phonenumber_field.phonenumber
-
-
+from random import randint
 import faker
 from . import models
 from django.contrib.auth.models import User
 from random import choice as random_choice
-from pizzeria.factories import UserFactory, PizzaFactory
-from phonenumber_field.modelfields import PhoneNumberField
+from pizzeria.factories import UserFactory, PizzaFactory, RestaurantFactory
 from faker import Faker
 
 from phonenumbers import PhoneNumber
-from random import randint
-
-
 from phonenumber_field.phonenumber import PhoneNumber
 
 
@@ -27,7 +20,11 @@ TYPE_OF_PAYMENT = [
 
 
 def fake_phone_number(fake: Faker) -> str:
-    return f'+48{fake.msisdn()[4:]}'
+    # started_pl_phone_number = [5, 6, 8]
+    # diced_pl_number = started_pl_phone_number[randint(0, 2)]
+    # return f'+48{diced_pl_number}{fake.msisdn()[5:]}'
+    return f'+48{5}{fake.msisdn()[5:]}'
+
 
 
 def generate_phone_number():
@@ -45,9 +42,6 @@ class ContactUserFactory(factory.django.DjangoModelFactory):
 
     @factory.lazy_attribute
     def phone(self):
-        # print('generator\n', generate_phone_number(), '\n')
-        phone_n = PhoneNumber.from_string(phone_number=generate_phone_number(), region='PL').as_e164
-        # print('phone_n\n', phone_n, '\n')
         return generate_phone_number()
 
 
@@ -55,9 +49,8 @@ class OrderFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = models.Order
 
-    total = factory.Faker('random_int')
-    id_restaurant = 1  # jak zdefiniowac to pole zeby testy przeszly pomyslnie ??
-    # dobrze jakby byla fabryka Restauracji zeby w razie dalszych sprawdzen nie był to random number =100 i nie bylo realnie takiej restauracji
+    contact_user = factory.SubFactory(ContactUserFactory)
+    restaurant = factory.SubFactory(RestaurantFactory)
 
 
 class PaymentFactory(factory.django.DjangoModelFactory):

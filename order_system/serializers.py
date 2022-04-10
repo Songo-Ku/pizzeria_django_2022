@@ -33,12 +33,12 @@ class OrderSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Order
-        fields = ['pk', 'id_restaurant', 'payment_status', 'contact_data', 'ordered_products']   # , 'ordered_products_names' , #ordered_products
+        fields = ['pk', 'restaurant', 'payment_status', 'contact_user', 'ordered_products']   # , 'ordered_products_names' , #ordered_products
 
 
 class PaymentSerializer(serializers.ModelSerializer):
-    restaurant_name = serializers.ReadOnlyField(source='order.get_restaurant_name')
-    restaurant_id = serializers.ReadOnlyField(source='order.id_restaurant')
+    restaurant_name = serializers.ReadOnlyField(source='order.restaurant.name')
+    restaurant_id = serializers.ReadOnlyField(source='order.restaurant.pk')
 
     class Meta:
         model = Payment
@@ -49,7 +49,7 @@ class OrderedProductsSerializer(serializers.ModelSerializer):
     # meals_name = serializers.ReadOnlyField(source='pizza.name')
     # order_name = serializers.ReadOnlyField(source='order.name')  # to nie działa
     # serializers.StringRelatedField(many=True) __str__ wyswietli takie info
-    order_name = serializers.ReadOnlyField(source='order.get_restaurant_name')
+    order_name = serializers.ReadOnlyField(source='order.restaurant.name')
     # product = serializers.PrimaryKeyRelatedField(queryset=Pizza.objects.all())
     product = PizzaSerializer(read_only=True)
 

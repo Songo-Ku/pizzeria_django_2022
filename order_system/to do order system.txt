@@ -35,3 +35,13 @@ dlaczego test pomijaja walidator w bazie przy tworzeniu, a w post jak wysylam be
 id_restaurant  problem z facotira ze jak robie testy to bede korzystal w ficzerach ze metody beda np zwracaly nazwe danej restauracji
 co wtedy jesli np. nie bedzie danego numeru >???
 czy na sztywno dac po prostu 1 i zawsze tworzyc pizzerie przyjmujac 1 w setupclass
+
+
+dodac testy unikalnosci pol jak np numer telfonu czy da sie dodac np. drugi raz ten sam numer telefonu ???
+albo usera o tej samej nazwie i nazwisku
+nie powinno się dać
+
+
+
+test na toppings czy zgadzaja sie po dodaniu i czy sa wyswietlone jako obiekt serializowany w odpowiedni sposob
+wiem ze sa ale trzeba sprawdzic czy testy przejda

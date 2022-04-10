@@ -14,28 +14,14 @@ class ContactUser(models.Model):
 
 
 class Order(models.Model):
-    id_restaurant = models.IntegerField()
-    contact_data = models.ForeignKey(ContactUser, on_delete=models.CASCADE)
+    restaurant = models.ForeignKey(Restaurant, on_delete=models.CASCADE)
+    contact_user = models.ForeignKey(ContactUser, on_delete=models.CASCADE)
 
     def __str__(self):
-        return f'zamowienie o nr. {self.pk} dla lokalu {self.get_restaurant_name_address()}'
-
-    def get_restaurant_name_address(self):
-        restaurant = Restaurant.objects.filter(pk=self.id_restaurant)
-        if len(restaurant) > 0:
-            return f'restauracja nr.{restaurant[0].id}  {restaurant[0].name} o adresie {restaurant[0].address}'
-        else:
-            return 'Not added yet - Unknown'
-
-    def get_restaurant_name(self):
-        restaurant = Restaurant.objects.filter(pk=self.id_restaurant)
-        if len(restaurant) > 0:
-            return f'zamowienie numer {self.pk} dla restauracji {restaurant[0].name}'
-        else:
-            return 'Not added yet - Unknown'
+        return f'zamowienie o nr. {self.pk} dla lokalu {self.restaurant.name} o id: {self.restaurant.pk}'
 
     def count_total(self):
-        return sum([product.total * product.count for product in self.ordered_products.all()])
+        return sum([product.price * product.count for product in self.ordered_products.all()])
 
 
 class Payment(models.Model):
@@ -58,17 +44,14 @@ class Payment(models.Model):
 class OrderedProducts(models.Model):
     pizza_name = models.CharField(max_length=40)
     count = models.IntegerField(default=1)
-    total = models.DecimalField(decimal_places=2, max_digits=7)
+    price = models.DecimalField(decimal_places=2, max_digits=7)
     order = models.ForeignKey(Order, models.CASCADE, related_name='ordered_products')
     product = models.ForeignKey(Pizza, related_name='ordered_products', on_delete=models.CASCADE)
 
     def __str__(self):
-        # return f'zamowiona pizza to {self.pizza_name} w ilosc {self.amount} za {self.amount * self.price}'
-        # return f'zamowiona pizza to {self.product.name} w ilosc {self.count} za {self.count} * {self.product.price}'
         return f'zamowiona pizza to {self.product.name} '
 
-    def set_total(self):
-        # pomyslec gdzie tego uzyc zeby pole self.total bylo uzupelnione w odpowiendim czasie odpowiednim wynikiem
+    def total_cost_for_ordered_product(self):
         return self.product.price * self.count
 
 
