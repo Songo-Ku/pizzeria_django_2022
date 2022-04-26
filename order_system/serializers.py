@@ -1,9 +1,7 @@
 from pizzeria.models import Restaurant, Pizza, Topping
 from pizzeria.serializers import PizzaSerializer
 from .models import Order, OrderedProducts, Payment, ContactUser
-from django.contrib.auth.models import User, Group
 from rest_framework import serializers
-from django.utils import timezone
 
 
 class ContactUserCreateSerializer(serializers.ModelSerializer):
@@ -43,6 +41,38 @@ class PaymentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Payment
         fields = ['pk', 'order', 'status', 'restaurant_name', 'restaurant_id']
+        read_only_fields = ['pk']
+
+
+class PaymentCreateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Payment
+        fields = ['pk', 'order', 'status']
+        # czy tu faktycznie powinien byc status w read only fields ? bo przy kreacji nie trzeba go dodawac
+
+
+
+
+        # check here
+
+
+
+
+
+
+
+
+        read_only_fields = ['pk', 'status']
+
+    def create(self, validated_data):
+        return super(PaymentCreateSerializer, self).create(validated_data)
+
+
+class PaymentUpdateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Payment
+        fields = ['pk', 'order', 'status']
+        read_only_fields = ['pk']
 
 
 class OrderedProductsSerializer(serializers.ModelSerializer):

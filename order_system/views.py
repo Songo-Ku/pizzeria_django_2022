@@ -1,6 +1,6 @@
 from .models import Order, OrderedProducts, Payment, ContactUser
 from .serializers import OrderSerializer, PaymentSerializer, OrderedProductsSerializer, OrderedProductsCreateSerializer, \
-    ContactUserSerializer, ContactUserCreateSerializer
+    ContactUserSerializer, ContactUserCreateSerializer, PaymentCreateSerializer, PaymentUpdateSerializer
 from rest_framework import viewsets, permissions, status
 from rest_framework.response import Response
 
@@ -33,6 +33,17 @@ class PaymentViewSet(viewsets.ModelViewSet):
     serializer_class = PaymentSerializer
     queryset = Payment.objects.all()
     permission_classes = [permissions.IsAuthenticated]
+
+    def get_serializer_class(self):
+        if self.action == 'create':
+            return PaymentCreateSerializer
+        elif self.action == 'update':
+            return PaymentUpdateSerializer
+        return super().get_serializer_class()
+
+    def perform_create(self, serializer):
+        serializer.validated_data['status'] = "not accepted"
+        serializer.save()
 
 
 class OrderedProductsViewSet(viewsets.ModelViewSet):

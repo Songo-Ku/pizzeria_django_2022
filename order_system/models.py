@@ -36,6 +36,10 @@ class Payment(models.Model):
     def __str__(self):
         return f'{self.status}'
 
+    def get_status_pending(self):
+        self.status = 'pending'
+        self.save()
+
     def get_payment_confirm(self):
         self.status = 'accepted'
         self.save()

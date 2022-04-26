@@ -1,4 +1,3 @@
-from rest_framework.test import APITestCase
 from random import randint
 from django.db.models import Max
 from order_system.models import Order, ContactUser
@@ -10,8 +9,9 @@ from rest_framework import status
 
 from order_system.factories import OrderFactory, PaymentFactory, OrderedProductsFactory, \
     ContactUserFactory
+from order_system.serializers import PaymentCreateSerializer, PaymentSerializer
 from pizzeria.factories import UserFactory, RestaurantFactory
-import factory
+import json
 
 
 class ContactUserViewSetTestCase(APITestCase):
@@ -152,3 +152,69 @@ class OrderViewSetTestCase(APITestCase):
 
 class PaymentViewSetTestCase(APITestCase):
     payment_detail_uri = '/api/payments/{}/'
+
+    @classmethod
+    def setUpClass(cls):
+        cls.user1 = UserFactory()
+        cls.url_payment_list = reverse("payment-list")
+        cls.restaurant1 = RestaurantFactory(owner=cls.user1)
+        cls.user_contact1 = ContactUserFactory()
+        cls.order1 = OrderFactory(restaurant=cls.restaurant1, contact_user=cls.user_contact1)
+        cls.order2 = OrderFactory(restaurant=cls.restaurant1, contact_user=cls.user_contact1)
+        cls.payment1 = PaymentFactory(order=cls.order1)
+        super().setUpClass()
+
+    def setUp(self):
+        self.client.force_authenticate(user=self.user1)
+        self.amount_of_payment = Payment.objects.filter().aggregate(max_id=Max('pk')).get('max_id')
+
+    def post_correct_payment(self):
+        valid_payment = {
+            "order": self.order2.id
+        }
+        return self.client.post(self.url_payment_list, valid_payment)
+
+    def post_incorrect_payment(self):
+        invalid_payment = {
+            "order": ""
+        }
+        return self.client.post(self.url_payment_list, invalid_payment)
+
+    def test_post_payment_status_200(self):
+        response = self.post_correct_payment()
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+    def test_post_payment_field_input_validation(self):
+        response = self.post_correct_payment()
+        self.assertEqual(response.data.get('status'), "not accepted")
+        self.assertEqual(response.data.get('order'), self.order2.id)
+
+    def test_post_payment_saved_to_db(self):
+        self.post_correct_payment()
+        self.assertEqual(Payment.objects.count(), self.amount_of_payment + 1)
+
+    def test_post_incorrect_payment_status_400(self):
+        response = self.post_incorrect_payment()
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_post_incorrect_payment_not_saved_to_db(self):
+        self.post_incorrect_payment()
+        self.assertEqual(Payment.objects.count(), self.amount_of_payment)
+
+    def test_post_not_exist_payment_status_404(self):
+        response = self.client.get(self.payment_detail_uri.format(self.amount_of_payment + 1))
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+
+    def test_list_payments(self):
+        response = self.client.get(self.url_payment_list)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(response.data), self.amount_of_payment)
+        data_serializer = PaymentSerializer(self.payment1).data
+        data_serializer['status'] = str(data_serializer.get("status"))
+        self.assertIn(data_serializer, json.loads(response.content))
+
+    def test_detail_payment(self):
+        response = self.client.get(self.payment_detail_uri.format(self.payment1.id))
+        self.assertEqual(response.data.get("status"), str(self.payment1.status))
+        self.assertEqual(response.data.get("restaurant_name"), str(self.restaurant1.name))
+        self.assertEqual(response.data.get("restaurant_id"), self.restaurant1.pk)

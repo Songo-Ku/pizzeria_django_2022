@@ -26,7 +26,6 @@ def fake_phone_number(fake: Faker) -> str:
     return f'+48{5}{fake.msisdn()[5:]}'
 
 
-
 def generate_phone_number():
     fake = Faker()
     return fake_phone_number(fake)
@@ -57,7 +56,7 @@ class PaymentFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = models.Payment
 
-    status = random_choice(TYPE_OF_PAYMENT)
+    status = factory.fuzzy.FuzzyChoice(TYPE_OF_PAYMENT)
     order = factory.SubFactory(OrderFactory)
 
 
