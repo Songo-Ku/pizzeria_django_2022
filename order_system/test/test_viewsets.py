@@ -10,7 +10,7 @@ from rest_framework import status
 from order_system.factories import OrderFactory, PaymentFactory, OrderedProductsFactory, \
     ContactUserFactory
 from order_system.serializers import PaymentCreateSerializer, PaymentSerializer
-from pizzeria.factories import UserFactory, RestaurantFactory
+from pizzeria.factories import UserFactory, RestaurantFactory, PizzaFactory
 import json
 
 
@@ -218,3 +218,21 @@ class PaymentViewSetTestCase(APITestCase):
         self.assertEqual(response.data.get("status"), str(self.payment1.status))
         self.assertEqual(response.data.get("restaurant_name"), str(self.restaurant1.name))
         self.assertEqual(response.data.get("restaurant_id"), self.restaurant1.pk)
+
+
+class OrderedProductViewSetTestCase(APITestCase):
+    payment_detail_uri = '/api/order-products/{}/'
+
+    @classmethod
+    def setUpClass(cls):
+        cls.user1 = UserFactory()
+        cls.contact_user1 = ContactUserFactory()
+        cls.restaurant1 = RestaurantFactory(owner=cls.user1)
+        cls.order1 = OrderFactory(restaurant=cls.restaurant1)
+        cls.product1 = PizzaFactory(restaurant=cls.restaurant1)
+        cls.product_ordered = OrderedProductsFactory(product=cls.product1, restaurant=cls.restaurant1)
+        super().setUpClass()
+
+    def setUp(self):
+        self.client.force_authenticate(user=self.user1)
+        self.amount_ordered_products = OrderedProducts.objects.filter().aggregate(max_id=Max('pk')).get("max_id")
