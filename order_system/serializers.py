@@ -59,9 +59,6 @@ class PaymentCreateSerializer(serializers.ModelSerializer):
 
 
 
-
-
-
         read_only_fields = ['pk', 'status']
 
     def create(self, validated_data):
