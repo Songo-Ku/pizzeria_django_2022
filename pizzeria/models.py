@@ -34,6 +34,8 @@ class Pizza(models.Model):
         return [topping.price for topping in self.topping_set.all()]
 
 
+
+
 class Topping(models.Model):
     name = models.CharField(max_length=100)
     price = models.DecimalField(decimal_places=2, max_digits=5)

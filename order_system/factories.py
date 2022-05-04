@@ -64,9 +64,8 @@ class OrderedProductsFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = models.OrderedProducts
 
-    pizza_name = factory.Faker('name')
-    count = factory.Faker('random_int')
-    total = random_choice([30, 50, 70, 100])
+    count = factory.fuzzy.FuzzyChoice([1, 2, 3, 4, 5])
+    price = random_choice([30, 50, 70, 100])
     order = factory.SubFactory(OrderFactory)
     product = factory.SubFactory(PizzaFactory)
 

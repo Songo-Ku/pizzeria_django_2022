@@ -62,9 +62,10 @@ class PizzaDetailSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Pizza
-        fields = ['pk', 'name', 'price', 'description', 'restaurant', 'restaurant_name', 'modified',
-                  'topping_set', 'topping_set_names', 'topping_set_prices'
-                  ]
+        fields = [
+            'pk', 'name', 'price', 'description', 'restaurant', 'restaurant_name', 'modified',
+            'topping_set', 'topping_set_names', 'topping_set_prices'
+        ]
         read_only_fields = ('pk', 'modified', 'created')
 
 

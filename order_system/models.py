@@ -46,7 +46,6 @@ class Payment(models.Model):
 
 
 class OrderedProducts(models.Model):
-    pizza_name = models.CharField(max_length=40)
     count = models.IntegerField(default=1)
     price = models.DecimalField(decimal_places=2, max_digits=7)
     order = models.ForeignKey(Order, models.CASCADE, related_name='ordered_products')

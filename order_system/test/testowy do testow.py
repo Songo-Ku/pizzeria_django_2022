@@ -41,7 +41,7 @@ class OrderViewSetTestCase(APITestCase):
         self.assertEqual(response.data.get('ordered_products'), [])
         self.assertEqual(Order.objects.get(pk=response.data.get("pk")).restaurant.id, self.restaurant1.id)
 
-    def test_post_incorrect_input_order_saved_to_db(self):
+    def test_post_incorrect_input_order_do_not_saved_to_db(self):
         response = self.post_incorrect_input_order()
         self.assertEquals(Order.objects.count(), self.amount_order)
 
@@ -56,7 +56,7 @@ class OrderViewSetTestCase(APITestCase):
         self.assertEqual(Order.objects.get(id=self.order1.id).restaurant, self.order1.restaurant)
 
     # tdd assumptions
-    def test_get_order_detail_status(self):
+    def test_get_order_detail(self):
         order_ = OrderFactory(restaurant=self.restaurant2, contact_user=self.contact_user2)
         response = self.client.get(self.order_detail_uri.format(order_.id))
         self.assertEqual(response.status_code, status.HTTP_200_OK)

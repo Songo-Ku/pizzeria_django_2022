@@ -18,7 +18,7 @@ router.register(r'pizzas', PizzaViewSet, basename='pizza')
 router.register(r'contact-users', ContactUserViewSet, basename='contact-user')
 router.register(r'orders', OrderViewSet, basename='order')
 router.register(r'payments', PaymentViewSet, basename='payment')
-router.register(r'order-products', OrderedProductsViewSet, basename='order-product')
+router.register(r'ordered-products', OrderedProductsViewSet, basename='ordered-product')
 
 # ---------------------------------------------------------
 

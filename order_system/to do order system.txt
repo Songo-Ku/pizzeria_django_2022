@@ -47,4 +47,19 @@ test na toppings czy zgadzaja sie po dodaniu i czy sa wyswietlone jako obiekt se
 wiem ze sa ale trzeba sprawdzic czy testy przejda
 
 
+w momencie zalozenia orderu trzeba zakladac payment, jesli order zostaje usuniety, order zostaje rowniez usuniety.
+
+jak dodac ograniczenie ze jak dodaje np. kolejna pizze taka sama to zeby mi sprawdzil czy juz ktorys z produktow nie jest dodany wczesniej ?
+
+
+lista z filtrem jako api vidok.
+
+    # test sprawdzajacy czy jesli doda sie ponownie ten sam produkt do orderu to czy w order bedzie
+    # on jako 2 pozycje czy zostanie dopisany do pozycji istniejacej
+
+
+
+float, numeric, decimal.Decimal, int
+jakie są różnice ? co powinienem wiedzieć na ten temat ?
+
 arkadiusz@administrator-HP-ProBook-450-G1.(none)

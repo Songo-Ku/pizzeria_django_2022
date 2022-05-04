@@ -1,6 +1,7 @@
 from .models import Order, OrderedProducts, Payment, ContactUser
 from .serializers import OrderSerializer, PaymentSerializer, OrderedProductsSerializer, OrderedProductsCreateSerializer, \
-    ContactUserSerializer, ContactUserCreateSerializer, PaymentCreateSerializer, PaymentUpdateSerializer
+    ContactUserSerializer, ContactUserCreateSerializer, PaymentCreateSerializer, PaymentUpdateSerializer, \
+    OrderedProductsListSerializer, OrderedProductsUpdateSerializer
 from rest_framework import viewsets, permissions, status
 from rest_framework.response import Response
 
@@ -55,20 +56,28 @@ class OrderedProductsViewSet(viewsets.ModelViewSet):
     permission_classes = [permissions.IsAuthenticated]
 
     def get_serializer_class(self):
-        if self.action == 'create' or self.action == 'update':
+        if self.action == 'create':
             return OrderedProductsCreateSerializer
+        elif self.action == 'list':
+            return OrderedProductsListSerializer
+        elif self.action == 'update':
+            return OrderedProductsUpdateSerializer
         return super().get_serializer_class()
 
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        print('request data to: \n:', request.data)
-        print('serializer to: \n:', serializer)
+        # print('request data to: \n:', request.data)
+        # print(' \nserializer to: \n:', serializer)
         self.perform_create(serializer)
         headers = self.get_success_headers(serializer.data)
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
     def perform_create(self, serializer):
         serializer.save()
-        print('ten serializer został zasave-wowany \n', serializer.data)
+        # print('ten serializer został zasave-wowany \n', serializer.data)
+
+    def perform_update(self, serializer):
+        serializer.validated_data['price'] = serializer.validated_data['product'].price
+        serializer.save()
 

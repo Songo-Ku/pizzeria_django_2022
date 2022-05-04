@@ -22,7 +22,6 @@ class OrderSerializer(serializers.ModelSerializer):
     # ordered_products = OrderedProductsSerializer(read_only=True)
     # ordered_products = serializers.PrimaryKeyRelatedField(queryset=Order.objects.all())
     # ordered_products = serializers.PrimaryKeyRelatedField(queryset=OrderedProducts.objects.all())
-    #  'ordered_products'
     ordered_products = serializers.HyperlinkedRelatedField(
         many=True,
         read_only=True,
@@ -31,7 +30,7 @@ class OrderSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Order
-        fields = ['pk', 'restaurant', 'payment_status', 'contact_user', 'ordered_products']   # , 'ordered_products_names' , #ordered_products
+        fields = ['pk', 'restaurant', 'payment_status', 'contact_user', 'ordered_products']
 
 
 class PaymentSerializer(serializers.ModelSerializer):
@@ -48,17 +47,6 @@ class PaymentCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Payment
         fields = ['pk', 'order', 'status']
-        # czy tu faktycznie powinien byc status w read only fields ? bo przy kreacji nie trzeba go dodawac
-
-
-
-
-        # check here
-
-
-
-
-
         read_only_fields = ['pk', 'status']
 
     def create(self, validated_data):
@@ -76,33 +64,43 @@ class OrderedProductsSerializer(serializers.ModelSerializer):
     # meals_name = serializers.ReadOnlyField(source='pizza.name')
     # order_name = serializers.ReadOnlyField(source='order.name')  # to nie działa
     # serializers.StringRelatedField(many=True) __str__ wyswietli takie info
-    order_name = serializers.ReadOnlyField(source='order.restaurant.name')
+    restaurant_name = serializers.ReadOnlyField(source='order.restaurant.name')
     # product = serializers.PrimaryKeyRelatedField(queryset=Pizza.objects.all())
     product = PizzaSerializer(read_only=True)
+    total = serializers.ReadOnlyField(source='total_cost_for_ordered_product')
 
     class Meta:
         model = OrderedProducts
-        fields = ['pk', 'count', 'order', 'order_name', 'product']
-        
-    def create(self, validated_data):
-        # recalcualted_price = sum([pizza.price for pizza in validated_data['product']])
-        # validated_data['total'] = recalcualted_price
-        return super(OrderedProductsSerializer, self).create(validated_data)
+        fields = ['pk', 'count', 'order', 'restaurant_name', 'product', 'price', 'total']
+        read_only_fields = ['pk']
+
+
+class OrderedProductsListSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = OrderedProducts
+        fields = ['pk', 'count', 'order', 'product', 'price']
+        read_only_fields = ['pk']
 
 
 class OrderedProductsCreateSerializer(serializers.ModelSerializer):
-    order_name = serializers.ReadOnlyField(source='order.get_restaurant_name')
-    product = serializers.PrimaryKeyRelatedField(queryset=Pizza.objects.all())
-
     class Meta:
         model = OrderedProducts
-        fields = ['pk', 'count', 'order', 'order_name', 'product', 'pizza_name']
+        fields = ['pk', 'count', 'order', 'product', 'price']
+        read_only_fields = ['pk', 'price']
 
     def create(self, validated_data):
-        print('to jest validated data from create productsserializers \n', validated_data)
-        validated_data['total'] = 0
+        if validated_data['product']:
+            validated_data['price'] = validated_data['product'].price
+        else:
+            validated_data['price'] = 0
         return super(OrderedProductsCreateSerializer, self).create(validated_data)
 
+
+class OrderedProductsUpdateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = OrderedProducts
+        fields = ['pk', 'count', 'order', 'product', 'price']
+        read_only_fields = ['pk', 'price']
 
 
 

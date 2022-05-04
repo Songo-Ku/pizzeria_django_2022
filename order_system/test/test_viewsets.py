@@ -1,4 +1,6 @@
 from random import randint
+from unicodedata import decimal
+
 from django.db.models import Max
 from order_system.models import Order, ContactUser
 from django.urls import reverse
@@ -9,7 +11,8 @@ from rest_framework import status
 
 from order_system.factories import OrderFactory, PaymentFactory, OrderedProductsFactory, \
     ContactUserFactory
-from order_system.serializers import PaymentCreateSerializer, PaymentSerializer
+from order_system.serializers import PaymentCreateSerializer, PaymentSerializer, OrderedProductsSerializer, \
+    OrderedProductsListSerializer
 from pizzeria.factories import UserFactory, RestaurantFactory, PizzaFactory
 import json
 
@@ -186,7 +189,7 @@ class PaymentViewSetTestCase(APITestCase):
 
     def test_post_payment_field_input_validation(self):
         response = self.post_correct_payment()
-        self.assertEqual(response.data.get('status'), "not accepted")
+        self.assertEqual(response.data.get("status"), "not accepted")
         self.assertEqual(response.data.get('order'), self.order2.id)
 
     def test_post_payment_saved_to_db(self):
@@ -220,8 +223,8 @@ class PaymentViewSetTestCase(APITestCase):
         self.assertEqual(response.data.get("restaurant_id"), self.restaurant1.pk)
 
 
-class OrderedProductViewSetTestCase(APITestCase):
-    payment_detail_uri = '/api/order-products/{}/'
+class OrderedProductsViewSetTestCase(APITestCase):
+    ordered_product_detail_uri = '/api/ordered-products/{}/'
 
     @classmethod
     def setUpClass(cls):
@@ -230,9 +233,80 @@ class OrderedProductViewSetTestCase(APITestCase):
         cls.restaurant1 = RestaurantFactory(owner=cls.user1)
         cls.order1 = OrderFactory(restaurant=cls.restaurant1)
         cls.product1 = PizzaFactory(restaurant=cls.restaurant1)
-        cls.product_ordered = OrderedProductsFactory(product=cls.product1, restaurant=cls.restaurant1)
+        cls.product_ordered = OrderedProductsFactory(product=cls.product1, order=cls.order1, price=cls.product1.price)
+        cls.url_product_ordered = reverse('ordered-product-list')
         super().setUpClass()
 
     def setUp(self):
         self.client.force_authenticate(user=self.user1)
         self.amount_ordered_products = OrderedProducts.objects.filter().aggregate(max_id=Max('pk')).get("max_id")
+
+    def post_correct_ordered_product(self):
+        valid_data = {
+            "count": 3,
+            "order": self.order1.pk,
+            "product": self.product1.pk
+        }
+        return self.client.post(self.url_product_ordered, valid_data)
+
+    def post_incorrect_ordered_product(self):
+        invalid_data = {
+            "count": 3,
+            "order": 'mistake',
+            "product": 'mistake'
+        }
+        return self.client.post(self.url_product_ordered, invalid_data)
+
+    def test_post_create_201(self):
+        response = self.post_correct_ordered_product()
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+    def test_post_correct_saved_to_db(self):
+        response = self.post_correct_ordered_product()
+        self.assertEqual(OrderedProducts.objects.count(), self.amount_ordered_products + 1)
+        self.assertEqual(OrderedProducts.objects.get(pk=response.data.get("pk")).price, self.product1.price)
+        self.assertEqual(OrderedProducts.objects.get(pk=response.data.get("pk")).count, response.data.get("count"))
+
+    def test_incorrect_post_create_status400(self):
+        response = self.post_incorrect_ordered_product()
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_incorrect_post_create_do_not_save_to_db(self):
+        self.post_incorrect_ordered_product()
+        self.assertEqual(OrderedProducts.objects.count(), self.amount_ordered_products)
+
+    def test_get_list_ordered_product(self):
+        response = self.client.get(self.url_product_ordered)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(OrderedProducts.objects.count(), self.amount_ordered_products)
+        self.assertEqual(len(response.data), self.amount_ordered_products)
+        data_serializer = OrderedProductsListSerializer(self.product_ordered).data
+        self.assertIn(data_serializer, json.loads(response.content))
+
+    def test_detail_ordered_product(self):
+        ordered_prod_ = OrderedProductsFactory(order=self.order1, product=self.product1, price=self.product1.price)
+        response = self.client.get(self.ordered_product_detail_uri.format(ordered_prod_.pk))
+        self.assertEqual(response['content-type'], 'application/json')
+        self.assertEqual(response.data.get("order"), self.order1.pk)
+        self.assertEqual(response.data.get("product").get("pk"), self.product1.pk)
+        self.assertEqual(response.data.get("product").get("restaurant"), self.restaurant1.pk)
+        self.assertEqual(response.data.get("product").get("restaurant_name"), self.restaurant1.name)
+        self.assertEqual(response.data.get("product").get("description"), self.product1.description)
+        self.assertEqual(response.data.get("product").get("topping_set"), [])
+        # trzeba dodac test z lista topping set
+        self.assertEqual(response.data.get('pk'), ordered_prod_.id)
+        self.assertEqual(response.data.get('restaurant_name'), self.order1.restaurant.name)
+        self.assertEqual(response.data.get('total'), float(response.data.get('price')) * response.data.get('count'))
+
+    def test_not_existed_ordered_prod_detail(self):
+        response = self.client.get(self.ordered_product_detail_uri.format(self.amount_ordered_products + 1))
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+
+
+
+
+
+
+
+
+
