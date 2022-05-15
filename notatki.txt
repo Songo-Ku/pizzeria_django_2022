@@ -1,0 +1,58 @@
+// nazwa usera:haslo usera@  na koncu nazwa bazy
+DATABASE_URL=postgresql://post:postgres@postgres:5432/postgres?
+postgres://username:password@localhost:5432/marketing
+
+
+usunalem z heroku yml:
+release:
+  image: web
+  command:
+    - django-admin migrate --noinput
+
+
+setts:
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
+#         'NAME': 'pizzeria',
+#         'USER': 'name',
+#         'PASSWORD': 'postgres',
+#         'HOST': 'localhost',
+#         'PORT': '5432',
+#     }
+# }
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
+#         'NAME': 'postgres',
+#         'USER': 'postgres',
+#         'PASSWORD': 'postgres',
+#         'HOST': 'localhost',
+#         'PORT': '5432',
+#     }
+# }
+
+statici:
+usuniete z installed apps:
+    # 'django.contrib.staticfiles'
+
+setts statics
+# STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+# STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+# STATIC_URL = "/staticfiles/"
+#
+# STATICFILES_DIRS = (
+#     os.path.join(BASE_DIR, 'static'),
+# )
+# STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
+
+
+# class PopularDateListAPIView(ListAPIView):
+#     serializer_class = FactDatePopularitySerializer
+#
+#     def get_queryset(self):
+#         qs = FactDate.objects.values('month').annotate(days_checked=Count('id')).order_by('-days_checked', '-month')
+#         for i in range(len(qs)):
+#             qs[i].update({"id": len(qs) - i})
+#         return qs

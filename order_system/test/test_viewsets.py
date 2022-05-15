@@ -25,6 +25,7 @@ class ContactUserViewSetTestCase(APITestCase):
         cls.order_list_url = reverse("contact-user-list")
         cls.user1 = UserFactory()
         cls.contact_user1 = ContactUserFactory()
+        print(reverse("contact-user-list"))
         super().setUpClass()
 
     def setUp(self):
@@ -280,8 +281,8 @@ class OrderedProductsViewSetTestCase(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(OrderedProducts.objects.count(), self.amount_ordered_products)
         self.assertEqual(len(response.data), self.amount_ordered_products)
-        data_serializer = OrderedProductsListSerializer(self.product_ordered).data
-        self.assertIn(data_serializer, json.loads(response.content))
+        data_ = OrderedProductsListSerializer(self.product_ordered).data
+        self.assertIn(data_, json.loads(response.content))
 
     def test_detail_ordered_product(self):
         ordered_prod_ = OrderedProductsFactory(order=self.order1, product=self.product1, price=self.product1.price)

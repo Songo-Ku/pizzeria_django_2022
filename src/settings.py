@@ -94,9 +94,9 @@ WSGI_APPLICATION = 'src.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'django_pizzeria',
+        'NAME': 'djangogirls',
         'USER': 'postgres',
-        'PASSWORD': 'postgresql123',
+        'PASSWORD': 'postgres',
         'HOST': 'localhost',
         'PORT': '5432',
     }
