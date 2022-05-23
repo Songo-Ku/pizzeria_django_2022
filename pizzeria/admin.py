@@ -9,6 +9,7 @@ admin.site.register(Topping)
 
 
 
+
 # @admin.register(Pizza)
 # class PizzaAdmin(admin.ModelAdmin):
 #     list_display = ('name', 'local')
